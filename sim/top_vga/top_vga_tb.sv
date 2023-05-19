@@ -61,7 +61,7 @@ end
  * Submodules instances
  */
 
-top_vga dut (
+top dut (
     .clk40MHz(clk),
     .clk100MHz(clk100),
 

@@ -8,6 +8,6 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/vga_pkg.sv \
-        ../../rtl/draw_rect_ctl.sv \
+sv work ../../rtl/variables/vga_pkg.sv \
+        ../../rtl/rectangle_pic/draw_rect_ctl.sv \
         draw_rect_ctl_tb.sv
