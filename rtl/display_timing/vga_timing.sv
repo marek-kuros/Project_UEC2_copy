@@ -51,49 +51,49 @@ always_ff @(posedge clk40MHz) begin
 end
 
 always_comb begin
-    if(timing_if.hcount < 1055) begin
+    if(timing_if.hcount < HOR_TOTAL_PIXEL_NUMBER) begin
         hcount_nxt = timing_if.hcount + 1;
     end
     else begin
         hcount_nxt = 0;
     end
     
-    if(timing_if.hcount == 1055 && timing_if.vcount < 627) begin
+    if(timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER && timing_if.vcount < VER_TOTAL_PIXEL_NUMBER) begin
         vcount_nxt = timing_if.vcount + 1;
     end
-    else if(timing_if.hcount == 1055 && timing_if.vcount == 627) begin
+    else if(timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER && timing_if.vcount == VER_TOTAL_PIXEL_NUMBER) begin
         vcount_nxt = 0;
     end
     else begin
         vcount_nxt = timing_if.vcount;
     end
 
-    if(timing_if.hcount >= 839 && timing_if.hcount < 967) begin
+    if(timing_if.hcount >= HOR_SYNC_START && timing_if.hcount < HOR_SYNC_START + HOR_SYNC_TIME) begin
         hsync_nxt = 1;
     end
     else begin
         hsync_nxt = 0;
     end
    
-    if(timing_if.hcount >= 799 && timing_if.hcount < 1055) begin
+    if(timing_if.hcount >= HOR_BLANK_START && timing_if.hcount < HOR_BLANK_START + HOR_BLANK_TIME) begin
         hblnk_nxt = 1;
     end
     else begin
         hblnk_nxt = 0;
     end
 
-    if(timing_if.vcount == 599 && timing_if.hcount == 1055) begin
+    if(timing_if.vcount == VER_BLANK_START && timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER) begin
         vblnk_nxt = 1;
     end
-    else if(timing_if.vcount == 627 && timing_if.hcount == 1055) begin
+    else if(timing_if.vcount == VER_BLANK_START +  VER_BLANK_TIME && timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER) begin
         vblnk_nxt = 0;
     end
     else begin
         vblnk_nxt = timing_if.vblnk;
     end
     
-    if(timing_if.hcount == 1055) begin
-        if(timing_if.vcount >= 600 && timing_if.vcount < 604) begin 
+    if(timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER) begin
+        if(timing_if.vcount >= VER_SYNC_START && timing_if.vcount < VER_SYNC_START + VER_SYNC_TIME) begin 
             vsync_nxt = 1;
         end
         else begin

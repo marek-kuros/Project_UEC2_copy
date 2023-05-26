@@ -71,19 +71,19 @@ vga_timing dut(
 
  // Here you can declare tasks with immediate assertions (assert).
 assert property(
-    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount >= 839 && timing_if.hcount < 967) |=> timing_if.hsync == 1
+    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount >= 1047 && timing_if.hcount < 1047+131) |=> timing_if.hsync == 1
 );
 
 assert property(
-    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount >= 799 && timing_if.hcount < 1055) |=> timing_if.hblnk == 1
+    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount >= 1023 && timing_if.hcount < 1343) |=> timing_if.hblnk == 1
 );
 
 assert property(
-    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.vcount == 599 && timing_if.hcount == 1055) |=> timing_if.vblnk == 1
+    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.vcount == 767 && timing_if.hcount == 1343) |=> timing_if.vblnk == 1
 );
 
 assert property(
-    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount == 1055 && timing_if.vcount >= 600 && timing_if.vcount < 604) |=> timing_if.vsync == 1
+    @(posedge clk && $realtime > (1.25*CLK_PERIOD)) (timing_if.hcount == 1343 && timing_if.vcount >= 770 && timing_if.vcount < 770 + 6) |=> timing_if.vsync == 1
 );
 
     
