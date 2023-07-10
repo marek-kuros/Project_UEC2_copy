@@ -10,12 +10,19 @@
 
 `timescale 1 ns / 1 ps
 
-module draw_bg(
-    input  logic clk40MHz,
-    input  logic rst,
+module draw_bg
+    #(
+        parameter H_start = 280,
+        parameter H_pixel_no = 490,
+        parameter V_start = 65,
+        parameter V_pixel_no = 415
+    )
+    (
+        input  logic clk65MHz,
+        input  logic rst,
 
-    vga_if_no_rgb.bg_in timing_if,
-    vga_if.out draw_bg_if
+        vga_if_no_rgb.bg_in timing_if,
+        vga_if.out draw_bg_if
 );
 
 import vga_pkg::*;
@@ -25,16 +32,16 @@ import vga_pkg::*;
  * Local variables and signals
  */
 
-reg [11:0] rom [1083264:0];
+// reg [11:0] rom [560448:0];
 
-initial $readmemh("../../rtl/background_pic/ekran_startowy.dat", rom);
+// initial $readmemh("../../rtl/background_pic/ekran_startowy.dat", rom);
 
 logic [11:0] rgb_nxt = '0;
 /**
  * Internal logic
  */
 
-always_ff @(posedge clk40MHz) begin : bg_ff_blk
+always_ff @(posedge clk65MHz) begin : bg_ff_blk
     if (rst) begin
         
         draw_bg_if.vcount <= '0;
@@ -70,10 +77,11 @@ always_comb begin : bg_comb_blk
             rgb_nxt = 12'h0_f_0;                // - - make a green line.
         else if (timing_if.hcount == HOR_PIXELS - 1)   // - right edge:
             rgb_nxt = 12'h0_0_f;                // - - make a blue line.
-        else if (timing_if.vcount <= VER_BLANK_START - 162 &&  timing_if.hcount <= HOR_BLANK_START)                                   // The rest of active display pixels:
-            rgb_nxt = rom[timing_if.vcount * 1344 + timing_if.hcount];                // - fill with gray.
+        else if (timing_if.vcount < V_start + V_pixel_no &&  timing_if.hcount < H_start + H_pixel_no &&
+                 timing_if.vcount >= V_start &&  timing_if.hcount >= H_start)                                   // The rest of active display pixels:
+            rgb_nxt = 12'h3_3_3;                // - fill with gray.
         else
-            rgb_nxt = 12'h0_2_f; 
+            rgb_nxt = 12'h0_0_0; 
     end
 end
 

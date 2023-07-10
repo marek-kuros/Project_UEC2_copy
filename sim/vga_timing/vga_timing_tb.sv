@@ -59,7 +59,7 @@ end
  */
 
 vga_timing dut(
-    .clk40MHz(clk),
+    .clk65MHz(clk),
     .rst,
     
     .timing_if

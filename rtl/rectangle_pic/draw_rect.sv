@@ -10,7 +10,7 @@
 `timescale 1 ns / 1 ps
 
 module draw_rect (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic rst,
 
     input  logic [11:0] rgb_pixel,
@@ -45,7 +45,7 @@ logic [11:0] rgb_dly;
 /**
  * Internal logic
   */ 
- always_ff @(posedge clk40MHz) begin : input_delay
+ always_ff @(posedge clk65MHz) begin : input_delay
     if (rst) begin
         vcount_dly <= '0;
         vsync_dly  <= '0;
@@ -67,7 +67,7 @@ logic [11:0] rgb_dly;
     end
 end
 
-always_ff @(posedge clk40MHz) begin : output_values
+always_ff @(posedge clk65MHz) begin : output_values
     if (rst) begin
         
         draw_rect_if.vcount <= '0;

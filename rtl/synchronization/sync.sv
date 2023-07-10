@@ -1,9 +1,14 @@
 module sync(
     input logic rst,
-    input logic clk40MHz,
+    input logic clk65MHz,
+    input logic clk50,
+    input logic clk100MHz,
 
     vga_if.in draw_bg_if,
     vga_if.out sync_if,
+
+    input logic left_in,
+    output logic left_out,
 
     input logic [11:0] xpos,
     input logic [11:0] ypos,
@@ -11,10 +16,28 @@ module sync(
     output logic [11:0] ypos_out
 );
 
-always_ff @(posedge clk40MHz) begin
+logic [11:0] xpos1, xpos2;
+logic [11:0] ypos1, ypos2;
+logic left1, left2;
+
+always_ff @(posedge clk100MHz) begin
+    xpos1 <= xpos;
+    ypos1 <= ypos;
+    left1 <= left_in;
+end
+
+always_ff @(posedge clk50) begin
+    xpos2 <= xpos1;
+    ypos2 <= ypos1;
+    left2 <= left1;    
+end
+
+always_ff @(posedge clk65MHz) begin
     if(!rst) begin
-        xpos_out <= xpos;
-        ypos_out <= ypos;
+        xpos_out <= xpos2;
+        ypos_out <= ypos2;
+
+        left_out <= left2;
 
         sync_if.hblnk  <= draw_bg_if.hblnk;
         sync_if.hcount <= draw_bg_if.hcount;
@@ -27,6 +50,8 @@ always_ff @(posedge clk40MHz) begin
     else begin
         xpos_out <= '0;
         ypos_out <= '0;
+
+        left_out <= '0;
   
         sync_if.hblnk  <= '0;
         sync_if.hcount <= '0;

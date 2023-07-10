@@ -9,7 +9,7 @@
 `timescale 1 ns / 1 ps
 
 module vga_timing (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic rst,
     
     vga_if_no_rgb.tim_out timing_if
@@ -31,7 +31,7 @@ logic hblnk_nxt = '0, hsync_nxt = '0, vsync_nxt = '0, vblnk_nxt = '0;
 // Video timing controller set for 800x600@60fps
 // using a 40 MHz pixel clock per VESA spec.
 
-always_ff @(posedge clk40MHz) begin
+always_ff @(posedge clk65MHz) begin
     if(rst) begin
         timing_if.vcount <= '0;
         timing_if.hcount  <= '0;

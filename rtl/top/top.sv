@@ -16,7 +16,7 @@
 
 module top
      (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic clk100MHz,
     
     inout  logic ps2_clk,
@@ -41,7 +41,7 @@ wire [11:0] rgb_pixel;
 wire [11:0] x_start, y_start;
 logic [11:0] x_ff, y_ff;
 
-wire left;
+wire left, left_sync;
 wire [11:0] x_out_ff;
 wire [11:0] y_out_ff;
 
@@ -63,6 +63,12 @@ assign {r,g,b} = draw_rect_char_if.rgb;
  * Submodules instances
  */
 
+ logic clk50;
+
+always_ff @(posedge clk100MHz) begin
+    clk50 <= ~clk50;
+end
+
 vga_if_no_rgb timing_if();
 vga_if draw_bg_if();
 vga_if draw_rect_if();
@@ -71,13 +77,13 @@ vga_if draw_rect_char_if();
 vga_if sync_if();
 
 vga_timing u_vga_timing (
-    .clk40MHz,
+    .clk65MHz,
     .rst,
     .timing_if(timing_if.tim_out)
 );
 
 draw_bg u_draw_bg (
-    .clk40MHz,
+    .clk65MHz,
     .rst,
 
     .timing_if(timing_if.bg_in),
@@ -85,7 +91,7 @@ draw_bg u_draw_bg (
 );
 
 draw_rect u_draw_rect(
-    .clk40MHz,
+    .clk65MHz,
     .rst,
 
     .x_start(x_out_ff),
@@ -118,7 +124,7 @@ MouseCtl u_MouseCtl(
 );
 
 draw_mouse u_draw_mouse(
-    .clk40MHz,
+    .clk65MHz,
     .rst,
 
     .x_start(x_ff),
@@ -131,8 +137,13 @@ draw_mouse u_draw_mouse(
 );
 
 sync u_sync(
-    .clk40MHz,
+    .clk50,
+    .clk65MHz,
+    .clk100MHz,
     .rst,
+
+    .left_in(left),
+    .left_out(left_sync),
 
     .draw_bg_if(draw_bg_if.in),
     .sync_if(sync_if.out),
@@ -144,15 +155,15 @@ sync u_sync(
 );
 
 image_rom u_image_rom(
-    .clk(clk40MHz),
+    .clk(clk65MHz),
     .address(address),
     .rgb(rgb_pixel)
 );
 
 draw_rect_ctl u_draw_rect_ctl(
     .rst(rst),
-    .clk40MHz(clk40MHz),
-    .mouse_left(left),
+    .clk65MHz(clk65MHz),
+    .mouse_left(left_sync),
     .mouse_xpos(x_ff),
     .mouse_ypos(y_ff),
     .xpos(x_out_ff),
@@ -165,7 +176,7 @@ draw_rect_char #(
 )u_draw_rect_char
 (
     .rst(rst),
-    .clk40MHz(clk40MHz),
+    .clk65MHz(clk65MHz),
     .draw_mouse_if(draw_mouse_if.in),
     .draw_rect_char_if(draw_rect_char_if.out),
     .char_xy(char_xy),
@@ -174,7 +185,7 @@ draw_rect_char #(
 );
 
 font_rom u_font_rom(
-    .clk(clk40MHz),
+    .clk(clk65MHz),
     .addr(addr),
     .char_line_pixels(char_pixel)
 );

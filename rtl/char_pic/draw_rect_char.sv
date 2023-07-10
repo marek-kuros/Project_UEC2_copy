@@ -15,7 +15,7 @@ module draw_rect_char
     parameter logic [10:0] y_of_box = 0
 )
 (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic rst,
 
     vga_if.out draw_rect_char_if,
@@ -48,7 +48,7 @@ logic [3:0] char_line_nxt = '0;
 /**
  * Internal logic
   */ 
- always_ff @(posedge clk40MHz) begin : input_signals
+ always_ff @(posedge clk65MHz) begin : input_signals
     if (rst) begin
         vcount_dly <= '0;
         vsync_dly  <= '0;
@@ -70,7 +70,7 @@ logic [3:0] char_line_nxt = '0;
     end
 end
 
-always_ff @(posedge clk40MHz) begin : output_signals
+always_ff @(posedge clk65MHz) begin : output_signals
     if (rst) begin
         
         draw_rect_char_if.vcount <= '0;
@@ -112,7 +112,7 @@ always_comb begin : bg_comb_blk
     end
 end
 
-always_ff @(posedge clk40MHz) begin: ff_for_array
+always_ff @(posedge clk65MHz) begin: ff_for_array
     if(rst) begin
         char_xy <= '0;
         char_line <= '0;

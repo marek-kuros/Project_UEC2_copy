@@ -62,7 +62,7 @@ end
  */
 
 top dut (
-    .clk40MHz(clk),
+    .clk65MHz(clk),
     .clk100MHz(clk100),
 
     .ps2_clk(),

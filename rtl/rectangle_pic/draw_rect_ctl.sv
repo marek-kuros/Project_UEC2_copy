@@ -10,7 +10,7 @@
 `timescale 1 ns / 1 ps
 
 module draw_rect_ctl (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic rst,
 
     input  logic mouse_left,
@@ -46,7 +46,7 @@ STATE state, state_nxt;
  * Internal logic
   */
 
-always @(posedge clk40MHz) begin : outputs
+always @(posedge clk65MHz) begin : outputs
     if(rst) begin
         xpos <= '0;
         ypos <= '0;
@@ -57,14 +57,14 @@ always @(posedge clk40MHz) begin : outputs
     end
 end
 
-always @(posedge clk40MHz) begin : write_state
+always @(posedge clk65MHz) begin : write_state
     state <= state_nxt;
 end
 
 integer k = 0, k_nxt = 0;
 shortint a = 0, a_nxt = 0;
 
-always @(posedge clk40MHz) begin
+always @(posedge clk65MHz) begin
     if(rst || state != FALL) begin
         k <= 0;
         a <= 0;

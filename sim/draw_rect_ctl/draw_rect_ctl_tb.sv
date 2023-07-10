@@ -66,7 +66,7 @@ end
  */
 
 draw_rect_ctl dut(
-    .clk40MHz(clk),
+    .clk65MHz(clk),
     .rst(rst),
     
     .mouse_xpos('0),

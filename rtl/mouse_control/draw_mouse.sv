@@ -10,7 +10,7 @@
 `timescale 1 ns / 1 ps
 
 module draw_mouse (
-    input  logic clk40MHz,
+    input  logic clk65MHz,
     input  logic rst,
 
     vga_if.out draw_mouse_if,
@@ -26,7 +26,7 @@ logic [11:0] rgb_nxt;
 
 
 MouseDisplay u_MouseDisplay(
-    .pixel_clk(clk40MHz),
+    .pixel_clk(clk65MHz),
     .xpos(x_start),
     .ypos(y_start),
     .enable_mouse_display_out(),
@@ -43,7 +43,7 @@ MouseDisplay u_MouseDisplay(
  * Local variables and signals
   */
 
-always_ff @(posedge clk40MHz) begin : bg_ff_blk
+always_ff @(posedge clk65MHz) begin : bg_ff_blk
 if (rst) begin
     
     draw_mouse_if.vcount <= '0;

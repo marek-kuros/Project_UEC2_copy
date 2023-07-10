@@ -47,8 +47,8 @@
  
  clk_wiz_0 u_clk_wiz_0(
     .clk(clk),
-    .clk100MHz(pclk100MHz),
-    .clk40MHz(pclk),
+    .clk_100MHz(pclk100MHz),
+    .clk_65MHz(pclk),
     .locked(locked)
  );
  
@@ -68,7 +68,7 @@
   */
  
  top u_top (
-     .clk40MHz(pclk),
+     .clk65MHz(pclk),
      .clk100MHz(pclk100MHz),
 
      .ps2_clk(PS2Clk),
