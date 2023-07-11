@@ -17,10 +17,13 @@
  module top_basys3(
      input  wire clk,
      input  wire btnC,
+
      output wire Vsync,
 
      inout  wire PS2Clk,
      inout  wire PS2Data,
+     
+     input  wire [15:0] sw,
 
      output wire Hsync,
      output wire [3:0] vgaRed,
@@ -75,6 +78,9 @@
      .ps2_data(PS2Data),
 
      .rst(btnC),
+
+     .sw,
+
      .r(vgaRed),
      .g(vgaGreen),
      .b(vgaBlue),

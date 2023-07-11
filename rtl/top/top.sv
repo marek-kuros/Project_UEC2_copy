@@ -22,6 +22,8 @@ module top
     inout  logic ps2_clk,
     inout  logic ps2_data,
 
+    input  logic [15:0] sw,
+
     input  logic rst,
     output logic vs,
     output logic hs,
@@ -50,6 +52,8 @@ wire [7:0] char_pixel;
 
 wire [7:0] char_xy;
 wire [3:0] char_line;
+
+wire screen_idle, screen_single, screen_multi;
 
  /**
  * Signals assignments
@@ -85,6 +89,10 @@ vga_timing u_vga_timing (
 draw_bg u_draw_bg (
     .clk65MHz,
     .rst,
+
+    // .screen_idle(screen_idle),
+    .screen_single(screen_single),
+    .screen_multi(screen_multi),
 
     .timing_if(timing_if.bg_in),
     .draw_bg_if(draw_bg_if.out)
@@ -171,14 +179,19 @@ draw_rect_ctl u_draw_rect_ctl(
 );
 
 draw_rect_char #(
-    .x_of_box(257),
-    .y_of_box(183)
+    .x_of_box(280),
+    .y_of_box(200)
 )u_draw_rect_char
 (
     .rst(rst),
     .clk65MHz(clk65MHz),
     .draw_mouse_if(draw_mouse_if.in),
     .draw_rect_char_if(draw_rect_char_if.out),
+
+    .screen_idle(screen_idle),
+    // .screen_single(screen_single),
+    // .screen_multi(screen_multi),
+
     .char_xy(char_xy),
     .char_line(char_line),
     .char_pixel(char_pixel)
@@ -194,6 +207,16 @@ char_rom_16x16 u_char_rom_16x16(
     .char_xy(char_xy),
     .char_line(char_line),
     .char_code(addr)
+);
+
+select_game_sm u_select_game_sm(
+    .clk65MHz,
+    .rst,
+    .sw,
+
+    .screen_idle(screen_idle),
+    .screen_single(screen_single),
+    .screen_multi(screen_multi)
 );
 
 endmodule

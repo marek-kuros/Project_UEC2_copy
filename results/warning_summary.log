@@ -1,9 +1,37 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-10 15:29:38
+Created: 2023-07-11 19:00:44
 
 ----SYNTHESIS----
+WARNING: [Synth 8-7129] Port sw[15] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[14] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[13] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[12] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[11] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[10] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[9] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[8] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[7] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[6] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[5] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[4] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[3] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[2] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port sw[15] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[14] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[13] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[12] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[11] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[10] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[9] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[8] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[7] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[6] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[5] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[4] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[3] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sw[2] in module top is either unconnected or has no load
 
 ----IMPLEMENTATION----
 CLEAR :)

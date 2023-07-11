@@ -18,6 +18,8 @@ module draw_rect_char
     input  logic clk65MHz,
     input  logic rst,
 
+    input  logic screen_idle,
+
     vga_if.out draw_rect_char_if,
     vga_if.in draw_mouse_if,
 
@@ -97,17 +99,22 @@ always_comb begin : bg_comb_blk
     if (draw_rect_char_if.vblnk || draw_rect_char_if.hblnk) begin        
         rgb_nxt = 12'h0_0_0;                    
     end else begin 
-        if(draw_rect_char_if.vcount >= y_of_box && draw_rect_char_if.vcount < y_of_box + 256 &&
-        draw_rect_char_if.hcount >= x_of_box && draw_rect_char_if.hcount < x_of_box + 128) begin                       
-            if(char_pixel[3'b111-draw_rect_char_if.hcount[2:0]+x_of_box[2:0]]) begin
-                rgb_nxt = 100;
+        if(screen_idle) begin
+            if(draw_rect_char_if.vcount >= y_of_box && draw_rect_char_if.vcount < y_of_box + 256 &&
+            draw_rect_char_if.hcount >= x_of_box && draw_rect_char_if.hcount < x_of_box + 128) begin                       
+                if(char_pixel[3'b111-draw_rect_char_if.hcount[2:0]+x_of_box[2:0]]) begin
+                    rgb_nxt = 12'b0_0_0;
+                end
+                else begin
+                    rgb_nxt = rgb_dly;
+                end
             end
             else begin
-                rgb_nxt = rgb_dly;
+                rgb_nxt = rgb_dly;    
             end
         end
         else begin
-            rgb_nxt = rgb_dly;
+            rgb_nxt = rgb_dly; 
         end
     end
 end
