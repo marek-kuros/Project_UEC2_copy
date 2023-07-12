@@ -39,8 +39,6 @@ set sv_files {
     ../rtl/interface/vga_if.sv
     ../rtl/mouse_control/draw_mouse.sv
     ../rtl/rectangle_pic/draw_rect_ctl.sv
-    ../rtl/rectangle_pic/draw_rect.sv
-    ../rtl/rectangle_pic/image_rom.sv
     ../rtl/synchronization/sync.sv
     ../rtl/top/top.sv
     ../rtl/variables/vga_pkg.sv

@@ -1,6 +1,6 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-11 19:00:44
+Created: 2023-07-12 15:44:59
 
 ----SYNTHESIS----
 WARNING: [Synth 8-7129] Port sw[15] in module select_game_sm is either unconnected or has no load

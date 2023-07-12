@@ -14,29 +14,29 @@ module draw_mouse (
     input  logic rst,
 
     vga_if.out draw_mouse_if,
-    vga_if.in draw_rect_if,
+    vga_if.in draw_rect_if
 
-    input logic [11:0] x_start,
-    input logic [11:0] y_start
+    // input logic [11:0] x_start,
+    // input logic [11:0] y_start
 
 );
 
 import vga_pkg::*;
-logic [11:0] rgb_nxt;
+//logic [11:0] rgb_nxt;
 
 
-MouseDisplay u_MouseDisplay(
-    .pixel_clk(clk65MHz),
-    .xpos(x_start),
-    .ypos(y_start),
-    .enable_mouse_display_out(),
+// MouseDisplay u_MouseDisplay(
+//     .pixel_clk(clk65MHz),
+//     .xpos(x_start),
+//     .ypos(y_start),
+//     .enable_mouse_display_out(),
 
-    .hcount(draw_rect_if.hcount),
-    .vcount(draw_rect_if.vcount),
-    .rgb_in(draw_rect_if.rgb),
-    .rgb_out(rgb_nxt),
-    .blank(draw_rect_if.vblnk || draw_rect_if.hblnk)
-);
+//     .hcount(draw_rect_if.hcount),
+//     .vcount(draw_rect_if.vcount),
+//     .rgb_in(draw_rect_if.rgb),
+//     .rgb_out(rgb_nxt),
+//     .blank(draw_rect_if.vblnk || draw_rect_if.hblnk)
+// );
 
 
 /**
@@ -63,7 +63,8 @@ end else begin
     draw_mouse_if.hsync  <= draw_rect_if.hsync;
     draw_mouse_if.hblnk  <= draw_rect_if.hblnk;
     
-    draw_mouse_if.rgb    <= rgb_nxt;
+    //draw_mouse_if.rgb    <= rgb_nxt;
+    draw_mouse_if.rgb    <= draw_rect_if.rgb;
 end
 end
 

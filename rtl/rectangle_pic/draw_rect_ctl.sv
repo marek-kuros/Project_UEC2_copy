@@ -1,148 +1,87 @@
 /**
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
- * Author:
+ * Author: Marek
  * Description:
- * Draw rectangle.
+ * Module for drawing "racket".
  */
 
 
 `timescale 1 ns / 1 ps
 
-module draw_rect_ctl (
+module draw_rect_ctl 
+#(
+    parameter logic [10:0] x_fix_position = 0,
+    parameter logic [10:0] width = 0
+) 
+(
     input  logic clk65MHz,
     input  logic rst,
-
-    input  logic mouse_left,
     
-    input  logic [11:0] mouse_xpos,
+    //input  logic [11:0] mouse_xpos,
     input  logic [11:0] mouse_ypos,
-    
-    output logic [11:0] xpos,
-    output logic [11:0] ypos
+
+    input logic screen_idle,
+
+    vga_if.out draw_rect_if,
+    vga_if.in draw_bg_if
 );
 
 import vga_pkg::*;
 
+localparam y_size_of_racket = 80;
 
 /**
  * Local variables and signals
   */
-logic [11:0] xpos_nxt;
-logic [11:0] ypos_nxt;
-logic reach_bottom = 0;
-
-typedef enum bit [1:0]{
-    IDLE = 2'b00,
-    FALL = 2'b01,
-    BOTTOM = 2'b10,
-    BACK = 2'b11
-} STATE;
-
-STATE state, state_nxt;
-
+logic [11:0] rgb_nxt = '0;
 
 /**
  * Internal logic
   */
-
-always @(posedge clk65MHz) begin : outputs
-    if(rst) begin
-        xpos <= '0;
-        ypos <= '0;
+always_ff @(posedge clk65MHz) begin : input_delay
+    if (rst) begin
+        draw_rect_if.vcount <= '0;
+        draw_rect_if.vsync  <= '0;
+        draw_rect_if.vblnk  <= '0;
+        draw_rect_if.hcount <= '0;
+        draw_rect_if.hsync  <= '0;
+        draw_rect_if.hblnk  <= '0;
+        draw_rect_if.rgb    <= '0;
     end
-    else begin
-        xpos <= xpos_nxt;
-        ypos <= ypos_nxt;
-    end
-end
-
-always @(posedge clk65MHz) begin : write_state
-    state <= state_nxt;
-end
-
-integer k = 0, k_nxt = 0;
-shortint a = 0, a_nxt = 0;
-
-always @(posedge clk65MHz) begin
-    if(rst || state != FALL) begin
-        k <= 0;
-        a <= 0;
-    end
-    else begin
-        k <= k_nxt;
-        a <= a_nxt;
+    else begin   
+        draw_rect_if.vcount <= draw_bg_if.vcount;
+        draw_rect_if.vsync  <= draw_bg_if.vsync;
+        draw_rect_if.vblnk  <= draw_bg_if.vblnk;
+        draw_rect_if.hcount <= draw_bg_if.hcount;
+        draw_rect_if.hsync  <= draw_bg_if.hsync;
+        draw_rect_if.hblnk  <= draw_bg_if.hblnk;
+        draw_rect_if.rgb    <= rgb_nxt;
     end
 end
 
-always_comb begin : state_nxt_case
-    case (state)
-        IDLE: state_nxt = (mouse_left && mouse_ypos + 64 < 600) ? FALL : IDLE;
-        FALL: state_nxt = reach_bottom ? BOTTOM : FALL;
-        BOTTOM : state_nxt = mouse_left ? BACK : BOTTOM;
-        BACK : state_nxt = (!mouse_left) ? IDLE : BACK;
-        default: state_nxt = IDLE;
-    endcase
-end
-
-always_comb begin
-    case (state)
-        IDLE: begin
-            xpos_nxt = mouse_xpos;
-            ypos_nxt = mouse_ypos;
-            k_nxt = 0;
-            a_nxt = '0;
-            reach_bottom = '0;
+always_comb begin : player_1_racket
+    if(screen_idle) begin
+        rgb_nxt = draw_bg_if.rgb;
+    end else begin
+        if((mouse_ypos >= 51 && mouse_ypos <= 717 - y_size_of_racket) && draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+           draw_bg_if.vcount > mouse_ypos && draw_bg_if.vcount < mouse_ypos + y_size_of_racket) begin
+            rgb_nxt = 12'hf_f_f;
         end
-
-        FALL: begin
-            if(ypos == 536) begin
-                reach_bottom = '1;
-                a_nxt = '0;
-            end
-            else begin
-                reach_bottom = '0;
-                a_nxt = a;
-            end
-
-            if(k < 400000) begin //10ms update
-                ypos_nxt = ypos;
-                xpos_nxt = xpos;
-                k_nxt = k+1;
-                
-            end
-            else begin
-                xpos_nxt = xpos;
-                ypos_nxt = (ypos + a >= 536) ? 536 : ypos + a;
-                k_nxt = 0;
-                a_nxt = a + 1;
-                
-            end
+        else if((mouse_ypos < 51) &&
+                (draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+                draw_bg_if.vcount > 51 && draw_bg_if.vcount < 51 + y_size_of_racket)) begin
+            rgb_nxt = 12'hf_f_f;
         end
-        BOTTOM: begin
-            xpos_nxt = xpos;
-            ypos_nxt = ypos;
-            k_nxt = '0;
-            a_nxt = '0;
-            reach_bottom = '1;
+        else if((mouse_ypos > 717 - y_size_of_racket) &&
+                (draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+                draw_bg_if.vcount > 717 - y_size_of_racket && draw_bg_if.vcount < 717)) begin
+            rgb_nxt = 12'hf_f_f;
         end
-
-        BACK: begin
-            xpos_nxt = xpos;
-            ypos_nxt = ypos;
-            k_nxt = '0;
-            a_nxt = '0;
-            reach_bottom = '1;
+        else begin
+            rgb_nxt = draw_bg_if.rgb;
         end
-        
-        default: begin
-            xpos_nxt = mouse_xpos;
-            ypos_nxt = mouse_ypos;
-            k_nxt = '0;
-            a_nxt = '0;
-            reach_bottom = '0;
-        end
-    endcase
+    end
 end
 
 endmodule

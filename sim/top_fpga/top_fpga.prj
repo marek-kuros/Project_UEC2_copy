@@ -16,10 +16,9 @@ sv work ../../rtl/variables/vga_pkg.sv \
         ../../rtl/interface/vga_if.sv \
         ../../rtl/mouse_control/draw_mouse.sv \
         ../../rtl/rectangle_pic/draw_rect_ctl.sv \
-        ../../rtl/rectangle_pic/draw_rect.sv \
-        ../../rtl/rectangle_pic/image_rom.sv \
         ../../rtl/synchronization/sync.sv \
         ../../rtl/top/top.sv \
+        ../../rtl/FSM/select_game_sm.sv \
         ../../rtl/background_pic/draw_bg.sv \
         ../../fpga/rtl/top_basys3.sv \
         ../common/tiff_writer.sv \

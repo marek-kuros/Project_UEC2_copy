@@ -17,7 +17,7 @@ module sync(
 );
 
 logic [11:0] xpos1, xpos2;
-logic [11:0] ypos1, ypos2;
+logic [11:0] ypos1 = '0, ypos2 = '0;
 logic left1, left2;
 
 always_ff @(posedge clk100MHz) begin
