@@ -11,7 +11,8 @@
 
 module draw_rect_ctl 
 #(
-    parameter logic [10:0] x_fix_position = 0,
+    parameter logic [10:0] x_fix_position_player_1 = 0,
+    parameter logic [10:0] x_fix_position_player_2 = 0,
     parameter logic [10:0] width = 0
 ) 
 (
@@ -21,7 +22,9 @@ module draw_rect_ctl
     //input  logic [11:0] mouse_xpos,
     input  logic [11:0] mouse_ypos,
 
-    input logic screen_idle,
+    input  logic screen_idle,
+    input  logic screen_single,
+    input  logic screen_multi,
 
     vga_if.out draw_rect_if,
     vga_if.in draw_bg_if
@@ -63,21 +66,39 @@ end
 always_comb begin : player_1_racket
     if(screen_idle) begin
         rgb_nxt = draw_bg_if.rgb;
-    end else begin
-        if((mouse_ypos >= 51 && mouse_ypos <= 717 - y_size_of_racket) && draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+    end 
+    else if(screen_single) begin
+        //player 1 racket
+        if((mouse_ypos >= 51 && mouse_ypos <= 717 - y_size_of_racket) && draw_bg_if.hcount > x_fix_position_player_1 && draw_bg_if.hcount < x_fix_position_player_1 + width &&
            draw_bg_if.vcount > mouse_ypos && draw_bg_if.vcount < mouse_ypos + y_size_of_racket) begin
             rgb_nxt = 12'hf_f_f;
         end
         else if((mouse_ypos < 51) &&
-                (draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+                (draw_bg_if.hcount > x_fix_position_player_1 && draw_bg_if.hcount < x_fix_position_player_1 + width &&
                 draw_bg_if.vcount > 51 && draw_bg_if.vcount < 51 + y_size_of_racket)) begin
             rgb_nxt = 12'hf_f_f;
         end
         else if((mouse_ypos > 717 - y_size_of_racket) &&
-                (draw_bg_if.hcount > x_fix_position && draw_bg_if.hcount < x_fix_position + width &&
+                (draw_bg_if.hcount > x_fix_position_player_1 && draw_bg_if.hcount < x_fix_position_player_1 + width &&
                 draw_bg_if.vcount > 717 - y_size_of_racket && draw_bg_if.vcount < 717)) begin
             rgb_nxt = 12'hf_f_f;
         end
+        //player 2 racket
+        else if((mouse_ypos >= 51 && mouse_ypos <= 717 - y_size_of_racket) && draw_bg_if.hcount > x_fix_position_player_2 && draw_bg_if.hcount < x_fix_position_player_2 + width &&
+            768 - draw_bg_if.vcount > mouse_ypos && 768 - draw_bg_if.vcount < mouse_ypos + y_size_of_racket) begin
+            rgb_nxt = 12'hf_f_f;
+        end
+        else if((mouse_ypos < 51) &&
+                (draw_bg_if.hcount > x_fix_position_player_2 && draw_bg_if.hcount < x_fix_position_player_2 + width &&
+                768 - draw_bg_if.vcount > 51 && 768 - draw_bg_if.vcount < 51 + y_size_of_racket)) begin
+            rgb_nxt = 12'hf_f_f;
+        end
+        else if((mouse_ypos > 717 - y_size_of_racket) &&
+                (draw_bg_if.hcount > x_fix_position_player_2 && draw_bg_if.hcount < x_fix_position_player_2 + width &&
+                768 - draw_bg_if.vcount > 717 - y_size_of_racket && 768 - draw_bg_if.vcount < 717)) begin
+            rgb_nxt = 12'hf_f_f;
+        end
+        //background
         else begin
             rgb_nxt = draw_bg_if.rgb;
         end

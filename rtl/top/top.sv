@@ -169,7 +169,8 @@ sync u_sync(
 // );
 
 draw_rect_ctl #(
-    .x_fix_position(923),
+    .x_fix_position_player_1(923),
+    .x_fix_position_player_2(100),
     .width(15)
 )u_draw_rect_ctl 
 (
@@ -180,6 +181,8 @@ draw_rect_ctl #(
     .mouse_ypos(y_ff),
 
     .screen_idle(screen_idle),
+    .screen_single(screen_single),
+    .screen_multi(screen_multi),
 
     .draw_bg_if(sync_if.in),
     .draw_rect_if(draw_rect_if.out)
