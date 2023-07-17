@@ -24,6 +24,11 @@
      inout  wire PS2Data,
      
      input  wire [15:0] sw,
+     input  wire [7:1]  JA,
+     input  wire [2:0]  JB,
+
+     output wire [7:5]  JBo,
+     output wire [6:0]  JC,
 
      output wire Hsync,
      output wire [3:0] vgaRed,
@@ -80,6 +85,8 @@
      .rst(btnC),
 
      .sw,
+     .input_pos({JA,JB}),
+     .output_pos({JBo,JC}),
 
      .r(vgaRed),
      .g(vgaGreen),

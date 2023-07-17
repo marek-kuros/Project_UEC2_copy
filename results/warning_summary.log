@@ -1,9 +1,12 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-12 16:46:55
+Created: 2023-07-17 11:59:38
 
 ----SYNTHESIS----
-WARNING: [Synth 8-87] always_comb on 'rgb_nxt_reg' did not result in combinational logic [rtl/rectangle_pic/draw_rect_ctl.sv:68]
+WARNING: [Synth 8-6014] Unused sequential element set_x.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:450]
+WARNING: [Synth 8-6014] Unused sequential element set_x.x_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:456]
+WARNING: [Synth 8-6014] Unused sequential element set_y.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:514]
+WARNING: [Synth 8-6014] Unused sequential element set_y.y_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:520]
 WARNING: [Synth 8-7129] Port sw[15] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[14] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[13] in module select_game_sm is either unconnected or has no load
@@ -18,10 +21,7 @@ WARNING: [Synth 8-7129] Port sw[5] in module select_game_sm is either unconnecte
 WARNING: [Synth 8-7129] Port sw[4] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[3] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[2] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port screen_multi in module draw_rect_ctl is either unconnected or has no load
-WARNING: [Synth 8-327] inferring latch for variable 'rgb_nxt_reg' [rtl/rectangle_pic/draw_rect_ctl.sv:68]
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-WARNING: [Synth 8-7129] Port screen_multi in module draw_rect_ctl is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[15] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[14] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[13] in module top is either unconnected or has no load
@@ -38,4 +38,4 @@ WARNING: [Synth 8-7129] Port sw[3] in module top is either unconnected or has no
 WARNING: [Synth 8-7129] Port sw[2] in module top is either unconnected or has no load
 
 ----IMPLEMENTATION----
-WARNING: [DRC PDRC-153] Gated clock check: Net u_top/u_select_game_sm/E[0] is a gated clock net sourced by a combinational pin u_top/u_select_game_sm/rgb_nxt_reg[11]_i_2/O, cell u_top/u_select_game_sm/rgb_nxt_reg[11]_i_2. This is not good design practice and will likely impact performance. For SLICE registers, for example, use the CE pin to control the loading of data.
+CLEAR :)

@@ -24,6 +24,9 @@ module top
 
     input  logic [15:0] sw,
 
+    input  logic [9:0] input_pos,
+    output logic [9:0] output_pos,
+
     input  logic rst,
     output logic vs,
     output logic hs,
@@ -182,7 +185,10 @@ draw_rect_ctl #(
 
     .screen_idle(screen_idle),
     .screen_single(screen_single),
-    .screen_multi(screen_multi),
+    //.screen_multi(screen_multi),
+
+    .input_pos(input_pos),
+    .output_pos(output_pos),
 
     .draw_bg_if(sync_if.in),
     .draw_rect_if(draw_rect_if.out)
