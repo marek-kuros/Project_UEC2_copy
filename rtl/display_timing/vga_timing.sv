@@ -11,6 +11,8 @@
 module vga_timing (
     input  logic clk65MHz,
     input  logic rst,
+
+    output logic end_of_frame,
     
     vga_if_no_rgb.tim_out timing_if
 );
@@ -27,6 +29,8 @@ logic [10:0] vcount_nxt = '0;
 logic [10:0] hcount_nxt = '0;
 logic hblnk_nxt = '0, hsync_nxt = '0, vsync_nxt = '0, vblnk_nxt = '0;
 
+logic end_of_frame_nxt = '0;
+
 // Describe the actual circuit for the assignment.
 // Video timing controller set for 800x600@60fps
 // using a 40 MHz pixel clock per VESA spec.
@@ -39,6 +43,8 @@ always_ff @(posedge clk65MHz) begin
         timing_if.hsync  <= '0;
         timing_if.vblnk  <= '0;
         timing_if.vsync  <= '0;
+
+        end_of_frame     <= '0;
     end
     else begin
         timing_if.vcount <= vcount_nxt;
@@ -47,6 +53,8 @@ always_ff @(posedge clk65MHz) begin
         timing_if.hsync <= hsync_nxt;
         timing_if.vblnk <= vblnk_nxt;
         timing_if.vsync <= vsync_nxt;
+
+        end_of_frame    <= end_of_frame_nxt;
     end
 end
 
@@ -102,8 +110,13 @@ always_comb begin
     end
     else begin
         vsync_nxt = timing_if.vsync;
-    end  
-    
+    end
+
+    if(timing_if.hcount == HOR_TOTAL_PIXEL_NUMBER && timing_if.vcount == VER_PIXELS) begin
+        end_of_frame_nxt = 1;
+    end else begin
+        end_of_frame_nxt = 0;
+    end    
 end
 
 endmodule

@@ -79,7 +79,7 @@ end
 vga_if_no_rgb timing_if();
 vga_if draw_bg_if();
 vga_if draw_rect_if();
-vga_if draw_mouse_if();
+vga_if draw_ball_if();
 vga_if draw_rect_char_if();
 vga_if sync_if();
 
@@ -202,7 +202,7 @@ draw_rect_char #(
 (
     .rst(rst),
     .clk65MHz(clk65MHz),
-    .draw_mouse_if(draw_rect_if.in),
+    .draw_mouse_if(draw_ball_if.in),
     .draw_rect_char_if(draw_rect_char_if.out),
 
     .screen_idle(screen_idle),
@@ -234,6 +234,22 @@ select_game_sm u_select_game_sm(
     .screen_idle(screen_idle),
     .screen_single(screen_single),
     .screen_multi(screen_multi)
+);
+
+draw_ball #(
+    .size_of_ball(15)
+) u_draw_ball (
+    .clk65MHz,
+    .rst,
+
+    .screen_idle(screen_idle),
+
+    .x_pos_of_ball(250),
+    .y_pos_of_ball(250),
+
+    .draw_ball_if(draw_ball_if.out),
+    .draw_rect_if(draw_rect_if.in)
+
 );
 
 endmodule
