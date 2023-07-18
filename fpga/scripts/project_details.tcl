@@ -44,6 +44,7 @@ set sv_files {
     ../rtl/variables/vga_pkg.sv
     ../rtl/background_pic/draw_bg.sv
     ../rtl/FSM/select_game_sm.sv
+    ../rtl/FSM/ball_control.sv
     ../rtl/ball/ball.sv
     rtl/top_basys3.sv
     

@@ -19,7 +19,7 @@
      input  logic [9:0] pos_of_player_2,
 
      input  logic screen_idle,
-     input  logic screen_single,
+     //input  logic screen_single,
      input  logic screen_multi,
 
      output logic [3:0] points_player_1,
@@ -43,7 +43,8 @@
  //flag
  logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
  //variables
-
+ logic [10:0] x_pos_of_ball_nxt;
+ logic [10:0] y_pos_of_ball_nxt;
  //typedef for FSM
 
  typedef enum logic [2:0] {
@@ -57,26 +58,61 @@
  STATE state, state_nxt;
 
  //tasks
- task check_if_ball_has_reached_racket(input logic [9:0] pos_player_1, pos_player_2, output STATE state_out);
+ task check_if_ball_has_reached_racket(input logic screen_multi, logic [9:0] pos_player_1, pos_player_2, output STATE state_out);
     begin
-        if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
-            state_out = P_SCOR;
-        end 
-        else if(y_pos_of_ball + size_of_ball < pos_player_2 || y_pos_of_ball > pos_player_2 + y_size_of_racket) begin
-            state_out = P_SCOR;
+        if(screen_multi) begin //logic for multiplayer
+            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
+                state_out = P_SCOR;
+            end 
+            else if(y_pos_of_ball + size_of_ball < pos_player_2 || y_pos_of_ball > pos_player_2 + y_size_of_racket) begin
+                state_out = P_SCOR;
+            end
+            else begin
+                state_out = FLY;
+            end
+        end else begin // logic for single
+            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
+                state_out = P_SCOR;
+            end 
+            else if(y_pos_of_ball + size_of_ball < 717 - pos_player_1 || y_pos_of_ball > 717 - pos_player_1 + y_size_of_racket) begin
+                state_out = P_SCOR;
+            end
+            else if(pos_player_1 >= 717) begin
+                if(y_pos_of_ball > y_size_of_racket + 51) begin
+                    state_out = P_SCOR;
+                end else begin
+                    state_out = FLY;
+                end
+            end
+            else if(pos_player_1 <= 51) begin
+                if(y_pos_of_ball < 717) begin
+                    state_out = P_SCOR;
+                end else begin
+                    state_out = FLY;
+                end
+            end
+            else begin
+                state_out = FLY;
+            end
         end
-        else begin
-            state_out = FLY;
-        end
-
     end
  endtask
  
- always_ff @(posedge clk65MHz) begin
+ always_ff @(posedge clk65MHz) begin : ff_for_states
      if(rst) begin
         state <= IDLE;
      end else begin
         state <= state_nxt;
+     end
+ end
+
+ always_ff @(posedge clk65MHz) begin : ff_for_position_outputs
+     if(rst) begin
+        x_pos_of_ball <= 11'd510;
+        y_pos_of_ball <= 11'd377;
+     end else begin
+        x_pos_of_ball <= x_pos_of_ball_nxt;
+        y_pos_of_ball <= y_pos_of_ball_nxt;
      end
  end
 
@@ -91,13 +127,47 @@
             
             FLY:    begin
                         if(x_pos_of_ball < x_player2_bounce || x_pos_of_ball > x_player1_bounce - size_of_ball) begin
-                            check_if_ball_has_reached_racket(points_player_1, points_player_2, state_nxt);
+                            check_if_ball_has_reached_racket(screen_multi, pos_of_player_1, pos_of_player_2, state_nxt);
                         end else begin
                             state_nxt = FLY;
                         end
-            end
+                    end
+            P_SCOR: state_nxt = START;
+
+            default: state_nxt = IDLE;
         endcase
     end
+ end
+
+ always_comb begin : action_for_states
+     case (state)
+        IDLE:    begin
+                   x_pos_of_ball_nxt = 11'd511;
+                   y_pos_of_ball_nxt = 11'd376;
+                 end
+        START:   begin
+                  x_pos_of_ball_nxt = 11'd510;
+                  y_pos_of_ball_nxt = 11'd377;
+                 end
+        FLY:     begin
+                  if(end_of_frame) begin
+                    x_pos_of_ball_nxt = x_pos_of_ball + 1;
+                    y_pos_of_ball_nxt = y_pos_of_ball;
+                  end else begin
+                    x_pos_of_ball_nxt = x_pos_of_ball;
+                    y_pos_of_ball_nxt = y_pos_of_ball;
+                  end
+                 end
+        P_SCOR:  begin
+                  x_pos_of_ball_nxt = x_pos_of_ball;
+                  y_pos_of_ball_nxt = y_pos_of_ball;
+                 end
+
+        default: begin
+                  x_pos_of_ball_nxt = x_pos_of_ball;
+                  y_pos_of_ball_nxt = y_pos_of_ball;
+                 end
+     endcase
  end
 
  endmodule

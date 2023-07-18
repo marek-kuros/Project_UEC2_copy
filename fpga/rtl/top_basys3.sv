@@ -21,6 +21,8 @@
      input  wire clk,
      input  wire btnC,
 
+     input  wire btnR,
+
      output wire Vsync,
 
      inout  wire PS2Clk,
@@ -90,6 +92,8 @@
      .ps2_data(PS2Data),
 
      .rst(btnC),
+
+     .serve(btnR),
 
      .sw,
      .input_pos({JA,JB}),

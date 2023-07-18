@@ -25,6 +25,8 @@ module top
     inout  logic ps2_clk,
     inout  logic ps2_data,
 
+    input  logic serve,
+
     input  logic [15:0] sw,
 
     input  logic [9:0] input_pos,
@@ -65,6 +67,11 @@ wire [3:0] char_line;
 
 wire screen_idle, screen_single, screen_multi;
 wire end_of_frame;
+
+/////////////////////////////////////////////////////////
+
+wire [10:0] x_pos_of_ball;
+wire [10:0] y_pos_of_ball;
 
  /**
  * Signals assignments
@@ -253,8 +260,8 @@ draw_ball #(
 
     .screen_idle(screen_idle),
 
-    .x_pos_of_ball(),
-    .y_pos_of_ball(),
+    .x_pos_of_ball(x_pos_of_ball),
+    .y_pos_of_ball(y_pos_of_ball),
 
     .draw_ball_if(draw_ball_if.out),
     .draw_rect_if(draw_rect_if.in)
@@ -272,6 +279,23 @@ disp_hex_mux u_disp_hex_mux(
     .dp_in(4'b1111),
     .an(an),
     .sseg({dp, seg})
+);
+
+ball_control u_ball_control(
+    .rst,
+    .clk65MHz,
+    .serve,
+
+    .end_of_frame(end_of_frame),
+    .pos_of_player_1(output_pos),
+    .pos_of_player_2(input_pos),
+    .screen_idle(screen_idle),
+    .screen_multi(screen_multi),
+    .points_player_1(),
+    .points_player_2(),
+
+    .x_pos_of_ball(x_pos_of_ball),
+    .y_pos_of_ball(y_pos_of_ball)
 );
 
 endmodule
