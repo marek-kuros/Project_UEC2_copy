@@ -54,6 +54,7 @@ set verilog_files {
     ../rtl/char_pic/font_rom.v
     ../rtl/clock/clk_wiz_0_clk_wiz.v
     ../rtl/clock/clk_wiz_0.v
+    ../rtl/points_printer/disp_hex_mux.v
 }
 
 # Specify VHDL design files location            -- EDIT

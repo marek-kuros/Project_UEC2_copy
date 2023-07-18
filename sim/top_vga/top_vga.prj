@@ -28,7 +28,8 @@ sv work ../../rtl/variables/vga_pkg.sv \
 
 verilog work ../../rtl/char_pic/font_rom.v \
              ../../rtl/clock/clk_wiz_0_clk_wiz.v \
-             ../../rtl/clock/clk_wiz_0.v
+             ../../rtl/clock/clk_wiz_0.v \
+             ../../rtl/points_printer/disp_hex_mux.v
 
 vhdl work    ../../rtl/mouse_control/MouseCtl.vhd \
              ../../rtl/mouse_control/Ps2Interface.vhd \

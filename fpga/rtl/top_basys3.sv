@@ -7,6 +7,9 @@
  * 2023  AGH University of Science and Technology
  * MTM UEC2
  * Piotr Kaczmarczyk
+ * 
+ * Modified even more by:
+ * Marek
  *
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.
@@ -29,6 +32,10 @@
 
      output wire [7:5]  JBo,
      output wire [6:0]  JC,
+
+     output wire [6:0]  seg,
+     output wire [3:0]  an,
+     output wire        dp,
 
      output wire Hsync,
      output wire [3:0] vgaRed,
@@ -87,6 +94,10 @@
      .sw,
      .input_pos({JA,JB}),
      .output_pos({JBo,JC}),
+
+     .seg,
+     .an,
+     .dp,
 
      .r(vgaRed),
      .g(vgaGreen),

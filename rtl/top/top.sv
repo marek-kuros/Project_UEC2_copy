@@ -8,6 +8,9 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  *
+ * Modified by:
+ * Marek
+ * 
  * Description:
  * The project top module.
  */
@@ -26,6 +29,10 @@ module top
 
     input  logic [9:0] input_pos,
     output logic [9:0] output_pos,
+
+    output logic [6:0]  seg,
+    output logic [3:0]  an,
+    output logic        dp,
 
     input  logic rst,
     output logic vs,
@@ -57,6 +64,7 @@ wire [7:0] char_xy;
 wire [3:0] char_line;
 
 wire screen_idle, screen_single, screen_multi;
+wire end_of_frame;
 
  /**
  * Signals assignments
@@ -86,6 +94,7 @@ vga_if sync_if();
 vga_timing u_vga_timing (
     .clk65MHz,
     .rst,
+    .end_of_frame(end_of_frame),
     .timing_if(timing_if.tim_out)
 );
 
@@ -244,12 +253,25 @@ draw_ball #(
 
     .screen_idle(screen_idle),
 
-    .x_pos_of_ball(250),
-    .y_pos_of_ball(250),
+    .x_pos_of_ball(),
+    .y_pos_of_ball(),
 
     .draw_ball_if(draw_ball_if.out),
     .draw_rect_if(draw_rect_if.in)
+);
 
+disp_hex_mux u_disp_hex_mux(
+    .clk(clk65MHz),
+    .reset(rst),
+
+    .hex0(1), //player 1 score
+    .hex1(3),
+    .hex2(5), //player 2 score
+    .hex3(7),
+
+    .dp_in(4'b1111),
+    .an(an),
+    .sseg({dp, seg})
 );
 
 endmodule

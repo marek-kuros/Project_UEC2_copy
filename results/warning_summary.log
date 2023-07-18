@@ -1,14 +1,12 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-17 14:15:09
+Created: 2023-07-17 18:51:32
 
 ----SYNTHESIS----
 WARNING: [Synth 8-6014] Unused sequential element set_x.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:450]
 WARNING: [Synth 8-6014] Unused sequential element set_x.x_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:456]
 WARNING: [Synth 8-6014] Unused sequential element set_y.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:514]
 WARNING: [Synth 8-6014] Unused sequential element set_y.y_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:520]
-WARNING: [Synth 8-689] width (32) of port connection 'x_pos_of_ball' does not match port width (11) of module 'draw_ball' [rtl/top/top.sv:247]
-WARNING: [Synth 8-689] width (32) of port connection 'y_pos_of_ball' does not match port width (11) of module 'draw_ball' [rtl/top/top.sv:248]
 WARNING: [Synth 8-7129] Port sw[15] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[14] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[13] in module select_game_sm is either unconnected or has no load
