@@ -41,10 +41,12 @@
  
  //auxiliary flags and variables
  //flag
- logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
+ logic fly_SW = '0, fly_W = 1, fly_NW = '0, fly_NE  = '0, fly_E = '0, fly_SE = '0;
  //variables
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
+
+ byte x_speed, y_speed;
  //typedef for FSM
 
  typedef enum logic [2:0] {
@@ -58,33 +60,37 @@
  STATE state, state_nxt;
 
  //tasks
- task check_if_ball_has_reached_racket(input logic screen_multi, logic [9:0] pos_player_1, pos_player_2, output STATE state_out);
+ task check_if_ball_has_reached_racket(input logic screen_multi, right_half, logic [9:0] pos_player, output STATE state_out); //dir_of_f_L means direction of flight left to right
     begin
         if(screen_multi) begin //logic for multiplayer
-            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
+            if(y_pos_of_ball + size_of_ball < pos_player || y_pos_of_ball > pos_player + y_size_of_racket) begin //seems fine
                 state_out = P_SCOR;
             end 
-            else if(y_pos_of_ball + size_of_ball < pos_player_2 || y_pos_of_ball > pos_player_2 + y_size_of_racket) begin
-                state_out = P_SCOR;
-            end
             else begin
                 state_out = FLY;
+                if(right_half) begin
+                    fly_E = '0;
+                    fly_W = 1'b1;
+                end else begin
+                    fly_E = 1'b1;
+                    fly_W = '0;
+                end
             end
         end else begin // logic for single
-            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
+            if(y_pos_of_ball + size_of_ball < pos_player || y_pos_of_ball > pos_player + y_size_of_racket) begin
                 state_out = P_SCOR;
             end 
-            else if(y_pos_of_ball + size_of_ball < 717 - pos_player_1 || y_pos_of_ball > 717 - pos_player_1 + y_size_of_racket) begin
+            else if(y_pos_of_ball + size_of_ball < 717 - pos_player || y_pos_of_ball > 717 - pos_player + y_size_of_racket) begin
                 state_out = P_SCOR;
             end
-            else if(pos_player_1 >= 717) begin
+            else if(pos_player >= 717) begin
                 if(y_pos_of_ball > y_size_of_racket + 51) begin
                     state_out = P_SCOR;
                 end else begin
                     state_out = FLY;
                 end
             end
-            else if(pos_player_1 <= 51) begin
+            else if(pos_player <= 51) begin
                 if(y_pos_of_ball < 717) begin
                     state_out = P_SCOR;
                 end else begin
@@ -97,6 +103,8 @@
         end
     end
  endtask
+
+ /*********************************************************************/
  
  always_ff @(posedge clk65MHz) begin : ff_for_states
      if(rst) begin
@@ -122,12 +130,15 @@
     end
     else begin
         case (state)
-            IDLE:   state_nxt = START;
+            IDLE:   state_nxt = screen_idle ? IDLE : START;
             START:  state_nxt = serve ? FLY : START;
             
             FLY:    begin
-                        if(x_pos_of_ball < x_player2_bounce || x_pos_of_ball > x_player1_bounce - size_of_ball) begin
-                            check_if_ball_has_reached_racket(screen_multi, pos_of_player_1, pos_of_player_2, state_nxt);
+                        if(x_pos_of_ball < x_player2_bounce) begin
+                            check_if_ball_has_reached_racket(screen_multi, '0, pos_of_player_2, state_nxt);
+                        end
+                        else if(x_pos_of_ball > x_player1_bounce - size_of_ball) begin
+                            check_if_ball_has_reached_racket(screen_multi, 1'b1, pos_of_player_1, state_nxt);
                         end else begin
                             state_nxt = FLY;
                         end
@@ -142,32 +153,72 @@
  always_comb begin : action_for_states
      case (state)
         IDLE:    begin
-                   x_pos_of_ball_nxt = 11'd511;
-                   y_pos_of_ball_nxt = 11'd376;
+                    x_pos_of_ball_nxt = 11'd511;
+                    y_pos_of_ball_nxt = 11'd376;
                  end
         START:   begin
-                  x_pos_of_ball_nxt = 11'd510;
-                  y_pos_of_ball_nxt = 11'd377;
+                    x_pos_of_ball_nxt = 11'd510;
+                    y_pos_of_ball_nxt = 11'd377;
                  end
         FLY:     begin
-                  if(end_of_frame) begin
-                    x_pos_of_ball_nxt = x_pos_of_ball + 1;
-                    y_pos_of_ball_nxt = y_pos_of_ball;
-                  end else begin
-                    x_pos_of_ball_nxt = x_pos_of_ball;
-                    y_pos_of_ball_nxt = y_pos_of_ball;
-                  end
+                    if(end_of_frame) begin
+                        if(fly_E)
+                            x_speed = 1;
+                            else
+                            x_speed = -1;
+                        x_pos_of_ball_nxt = x_pos_of_ball + x_speed;
+                        y_pos_of_ball_nxt = y_pos_of_ball + y_speed;
+                    end else begin
+                        x_pos_of_ball_nxt = x_pos_of_ball;
+                        y_pos_of_ball_nxt = y_pos_of_ball;
+                    end
                  end
         P_SCOR:  begin
-                  x_pos_of_ball_nxt = x_pos_of_ball;
-                  y_pos_of_ball_nxt = y_pos_of_ball;
+                    x_pos_of_ball_nxt = x_pos_of_ball;
+                    y_pos_of_ball_nxt = y_pos_of_ball;
                  end
 
         default: begin
-                  x_pos_of_ball_nxt = x_pos_of_ball;
-                  y_pos_of_ball_nxt = y_pos_of_ball;
+                    x_pos_of_ball_nxt = x_pos_of_ball;
+                    y_pos_of_ball_nxt = y_pos_of_ball;
                  end
      endcase
+ end
+
+//  always_comb begin
+//     case(1'b1)
+//         fly_SW: begin
+//             x_speed = -1; y_speed = 1; 
+//         end
+
+//         fly_W: begin
+//             x_speed = -1; y_speed = 0; 
+//         end
+
+//         fly_NW: begin
+//             x_speed = -1; y_speed = -1; 
+//         end
+
+//         fly_NE: begin
+//             x_speed = 1; y_speed = -1; 
+//         end
+
+//         fly_E: begin
+//             x_speed = 1; y_speed = 0; 
+//         end
+
+//         fly_SE: begin
+//             x_speed = 1; y_speed = 1; 
+//         end
+//         default: begin
+//             x_speed = 1; y_speed = 0;
+//         end
+//     endcase
+// end
+
+ //_________\\
+ always @* begin
+    $display("current state %s", state);
  end
 
  endmodule

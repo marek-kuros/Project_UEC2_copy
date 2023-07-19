@@ -1,6 +1,6 @@
 # Copyright (C) 2023  AGH University of Science and Technology
 # MTM UEC2
-# Author: Sabina
+# Author: Marek
 #
 # Description:
 # List of files defining the modules used during the test.
@@ -10,5 +10,5 @@
 
 
 sv work ../../rtl/variables/vga_pkg.sv \
-        ../../rtl/FSM/select_game_sm.sv \
-        select_game_sm_tb.sv
+        ../../rtl/FSM/ball_control.sv \
+        ball_control_tb.sv

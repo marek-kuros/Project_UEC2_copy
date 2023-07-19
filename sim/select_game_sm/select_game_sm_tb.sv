@@ -17,7 +17,7 @@
       *  Local parameters
       */
       
-     localparam CLK_PERIOD = 25;     // 40 MHz
+     localparam CLK_PERIOD = 15;     // ~65 MHz
      
      
      /**
@@ -39,7 +39,7 @@
  
      initial begin
          clk = 1'b0;
-         forever #(CLK_PERIOD/2) clk = ~clk;
+         forever #(CLK_PERIOD) clk = ~clk;
      end
  
      /**
