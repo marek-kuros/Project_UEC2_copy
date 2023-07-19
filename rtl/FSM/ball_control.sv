@@ -36,17 +36,19 @@
  localparam size_of_ball     = 15;
  localparam y_size_of_racket = 80;
 
+ localparam speed_of_ball    = 5;
+
  //parameter logic [3:0] __|size_of_ball = 15|__
  //localparam y_size_of_racket = 80;
  
  //auxiliary flags and variables
  //flag
- logic fly_SW = '0, fly_W = 1, fly_NW = '0, fly_NE  = '0, fly_E = '0, fly_SE = '0;
+ logic fly_SW = '0, fly_W = '0, fly_NW = '0, fly_NE  = '0, fly_E = 1'b1, fly_SE = '0;
  //variables
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
 
- byte x_speed, y_speed;
+ integer x_speed, y_speed;
  //typedef for FSM
 
  typedef enum logic [2:0] {
@@ -75,6 +77,7 @@
                     fly_E = 1'b1;
                     fly_W = '0;
                 end
+
             end
         end else begin // logic for single
             if(y_pos_of_ball + size_of_ball < pos_player || y_pos_of_ball > pos_player + y_size_of_racket) begin
@@ -134,10 +137,10 @@
             START:  state_nxt = serve ? FLY : START;
             
             FLY:    begin
-                        if(x_pos_of_ball < x_player2_bounce) begin
+                        if(x_pos_of_ball <= x_player2_bounce) begin
                             check_if_ball_has_reached_racket(screen_multi, '0, pos_of_player_2, state_nxt);
                         end
-                        else if(x_pos_of_ball > x_player1_bounce - size_of_ball) begin
+                        else if(x_pos_of_ball >= x_player1_bounce - size_of_ball) begin
                             check_if_ball_has_reached_racket(screen_multi, 1'b1, pos_of_player_1, state_nxt);
                         end else begin
                             state_nxt = FLY;
@@ -162,10 +165,6 @@
                  end
         FLY:     begin
                     if(end_of_frame) begin
-                        if(fly_E)
-                            x_speed = 1;
-                            else
-                            x_speed = -1;
                         x_pos_of_ball_nxt = x_pos_of_ball + x_speed;
                         y_pos_of_ball_nxt = y_pos_of_ball + y_speed;
                     end else begin
@@ -185,36 +184,36 @@
      endcase
  end
 
-//  always_comb begin
-//     case(1'b1)
-//         fly_SW: begin
-//             x_speed = -1; y_speed = 1; 
-//         end
+ always_comb begin
+    case(1'b1)
+        fly_SW: begin
+            x_speed = -speed_of_ball; y_speed = speed_of_ball; 
+        end
 
-//         fly_W: begin
-//             x_speed = -1; y_speed = 0; 
-//         end
+        fly_W: begin
+            x_speed = -speed_of_ball; y_speed = 0; 
+        end
 
-//         fly_NW: begin
-//             x_speed = -1; y_speed = -1; 
-//         end
+        fly_NW: begin
+            x_speed = -speed_of_ball; y_speed = -speed_of_ball; 
+        end
 
-//         fly_NE: begin
-//             x_speed = 1; y_speed = -1; 
-//         end
+        fly_NE: begin
+            x_speed = speed_of_ball; y_speed = -speed_of_ball; 
+        end
 
-//         fly_E: begin
-//             x_speed = 1; y_speed = 0; 
-//         end
+        fly_E: begin
+            x_speed = speed_of_ball; y_speed = 0; 
+        end
 
-//         fly_SE: begin
-//             x_speed = 1; y_speed = 1; 
-//         end
-//         default: begin
-//             x_speed = 1; y_speed = 0;
-//         end
-//     endcase
-// end
+        fly_SE: begin
+            x_speed = speed_of_ball; y_speed = speed_of_ball; 
+        end
+        default: begin
+            x_speed = speed_of_ball; y_speed = 0;
+        end
+    endcase
+end
 
  //_________\\
  always @* begin
