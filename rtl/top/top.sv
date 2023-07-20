@@ -288,7 +288,7 @@ ball_control u_ball_control(
 
     .end_of_frame(end_of_frame),
     .pos_of_player_1(output_pos),
-    .pos_of_player_2(input_pos),
+    .pos_of_player_2(/*input_pos*/ 9'd377),
     .screen_idle(screen_idle),
     .screen_multi(screen_multi),
     .points_player_1(),

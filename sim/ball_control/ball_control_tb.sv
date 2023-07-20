@@ -62,7 +62,7 @@ module ball_control_tb;
         .y_pos_of_ball(y_pos_of_ball)
     );
 
-always #1000000 $finish;
+//always #1000000 $finish;
 
 always @* $display("x of ball %d, y of ball %d", x_pos_of_ball, y_pos_of_ball);
 
