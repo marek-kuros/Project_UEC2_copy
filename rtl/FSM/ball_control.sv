@@ -43,7 +43,8 @@
  
  //auxiliary flags and variables
  //flag
- logic fly_SW = '0, fly_W = '0, fly_NW = '0, fly_NE  = '0, fly_E = 1'b1, fly_SE = '0;
+ logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
+ logic fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt;
  //variables
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
@@ -124,6 +125,14 @@
      end
  end
 
+ always_ff @(posedge clk65MHz) begin : ff_for_flight_direction
+     if(rst) begin
+        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} <= '0;
+     end else begin
+        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} <= {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt};
+     end
+ end
+
  always_comb begin : state_selector
     if(screen_idle) begin
        state_nxt = IDLE;
@@ -148,7 +157,7 @@
     end
  end
 
- always_comb begin : action_for_states
+ always_comb begin : action_for_states //seems fine
     reached_max = '0;
      case (state)
         IDLE:    begin
@@ -194,49 +203,43 @@
 
  always_comb begin  : set_direction_of_the_flight
     //hit upper bar
-     if(y_pos_of_ball <= 51 && fly_NE) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_SE = 1;
+     if(y_pos_of_ball <= 51 && fly_NE && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_SE_nxt = 1;
      end
-     else if(y_pos_of_ball <= 51 && fly_NW) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_SW = 1;
+     else if(y_pos_of_ball <= 51 && fly_NW && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_SW_nxt = 1;
      end
     // hit lower bar
-     else if(y_pos_of_ball >= 717 && fly_SE) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_NE = 1;
+     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SE && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_NE_nxt = 1;
      end
-     else if(y_pos_of_ball >= 717 && fly_SW) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_NW = 1;
-     end
-
-     else if(x_pos_of_ball > 923 && state_nxt == FLY) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_W = 1;
+     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SW && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_NW_nxt = 1;
      end
 
-     else if(x_pos_of_ball < 100 && state_nxt == FLY) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_E = 1;
+     else if(x_pos_of_ball >= 923 && state_nxt == FLY && fly_E) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_W_nxt = 1;
      end
-     else if(state_nxt == START) begin
-        {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_E = 1;
+
+     else if(x_pos_of_ball <= 100 && state_nxt == FLY && fly_W) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_E_nxt = 1;
+     end
+     else if(state == START) begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        fly_E_nxt = 1;
      end
      else begin
-        // {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE} = '0;
-        fly_SW = fly_SW;
-        fly_W  = fly_W;
-        fly_NW = fly_NW;
-        fly_NE = fly_NE;
-        fly_E  = fly_E;
-        fly_SE = fly_SE;
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
      end
  end
 
- always_comb begin : set_speed
+ always_comb begin : set_speed //seems fine
     case(1'b1)
         fly_SW: begin
             x_speed = -speed_of_ball; y_speed = speed_of_ball; 
