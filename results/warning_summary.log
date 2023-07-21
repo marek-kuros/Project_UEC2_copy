@@ -1,6 +1,6 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-21 13:15:24
+Created: 2023-07-21 17:54:04
 
 ----SYNTHESIS----
 WARNING: [Synth 8-6014] Unused sequential element set_x.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:450]
@@ -31,6 +31,16 @@ WARNING: [Synth 8-7129] Port sw[5] in module select_game_sm is either unconnecte
 WARNING: [Synth 8-7129] Port sw[4] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[3] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[2] in module select_game_sm is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[6] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[5] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[4] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[3] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[2] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[1] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[0] in module top is either unconnected or has no load
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 WARNING: [Synth 8-7129] Port points_player_1[3] in module ball_control is either unconnected or has no load
 WARNING: [Synth 8-7129] Port points_player_1[2] in module ball_control is either unconnected or has no load
@@ -54,6 +64,16 @@ WARNING: [Synth 8-7129] Port sw[5] in module top is either unconnected or has no
 WARNING: [Synth 8-7129] Port sw[4] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[3] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port sw[2] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[6] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[5] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[4] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[3] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[2] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[1] in module top is either unconnected or has no load
+WARNING: [Synth 8-7129] Port input_pos[0] in module top is either unconnected or has no load
 
 ----IMPLEMENTATION----
 CLEAR :)

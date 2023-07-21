@@ -190,7 +190,7 @@ sync u_sync(
 draw_rect_ctl #(
     .x_fix_position_player_1(923),
     .x_fix_position_player_2(100),
-    .width(15)
+    .width(25)
 )u_draw_rect_ctl 
 (
     .rst(rst),
@@ -203,7 +203,7 @@ draw_rect_ctl #(
     .screen_single(screen_single),
     //.screen_multi(screen_multi),
 
-    .input_pos(input_pos),
+    .input_pos(/*input_pos*/ 10'd377),
     .output_pos(output_pos),
 
     .draw_bg_if(sync_if.in),
@@ -288,7 +288,7 @@ ball_control u_ball_control(
 
     .end_of_frame(end_of_frame),
     .pos_of_player_1(output_pos),
-    .pos_of_player_2(/*input_pos*/ 9'd377),
+    .pos_of_player_2(/*input_pos*/ 10'd377),
     .screen_idle(screen_idle),
     .screen_multi(screen_multi),
     .points_player_1(),

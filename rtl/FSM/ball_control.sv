@@ -68,10 +68,10 @@
  task check_if_ball_has_reached_racket(input logic screen_multi, logic [9:0] pos_player_1, logic [9:0] pos_player_2, output STATE state_out); //dir_of_f_L means direction of flight left to right
     begin
         if(screen_multi) begin //logic for multiplayer
-            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin //seems fine
+            if(x_pos_of_ball >= x_player1_bounce - size_of_ball && (y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket)) begin //seems fine
                 state_out = P_SCOR;
             end
-            else if(y_pos_of_ball + size_of_ball < pos_player_2 || y_pos_of_ball > pos_player_2 + y_size_of_racket) begin //seems fine
+            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball + size_of_ball < pos_player_2 || y_pos_of_ball > pos_player_2 + y_size_of_racket)) begin //seems fine
                 state_out = P_SCOR;
             end 
             else begin
@@ -83,6 +83,7 @@
             end 
             else if(y_pos_of_ball + size_of_ball < 717 - pos_player_1 || y_pos_of_ball > 717 - pos_player_1 + y_size_of_racket) begin
                 state_out = P_SCOR;
+
             end
             else if(pos_player_1 >= 717) begin
                 if(y_pos_of_ball > y_size_of_racket + 51) begin
@@ -105,6 +106,37 @@
     end
  endtask
 
+ task direction_of_bounce(input logic screen_multi, logic [9:0] pos_player_1, logic [9:0] pos_player_2, output logic fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt);
+    begin
+        {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
+        if(screen_multi) begin
+            if(x_pos_of_ball >= x_player1_bounce - size_of_ball) begin
+                if(y_pos_of_ball + size_of_ball >= pos_player_1 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/3) begin
+                    fly_NW_nxt = 1;
+                end
+                else if(y_pos_of_ball + size_of_ball >= pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/2) begin
+                    fly_W_nxt = 1;
+                end
+                else begin
+                    fly_SW_nxt = 1;
+                end
+            end else begin
+                if(y_pos_of_ball + size_of_ball >= pos_player_2 && y_pos_of_ball + size_of_ball < pos_player_2 + y_size_of_racket/3) begin
+                    fly_NE_nxt = 1;
+                end
+                else if(y_pos_of_ball + size_of_ball >= pos_player_2 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_2 + y_size_of_racket/2) begin
+                    fly_E_nxt = 1;
+                end
+                else begin
+                    fly_SE_nxt = 1;
+                end
+            end
+        end else begin
+
+        end
+
+    end
+ endtask
  /*********************************************************************/
  
  always_ff @(posedge clk65MHz) begin : ff_for_states
@@ -203,32 +235,34 @@
 
  always_comb begin  : set_direction_of_the_flight
     //hit upper bar
-     if(y_pos_of_ball <= 51 && fly_NE && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+     if(y_pos_of_ball <= 51 && fly_NE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_SE_nxt = 1;
      end
-     else if(y_pos_of_ball <= 51 && fly_NW && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+     else if(y_pos_of_ball <= 51 && fly_NW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_SW_nxt = 1;
      end
     // hit lower bar
-     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SE && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_NE_nxt = 1;
      end
-     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SW && x_pos_of_ball > 100 && x_pos_of_ball < 923) begin
+     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_NW_nxt = 1;
      end
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //hit racket
 
-     else if(x_pos_of_ball >= 923 && state_nxt == FLY && fly_E) begin
+
+     else if(x_pos_of_ball >= x_player1_bounce && state_nxt == FLY) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_W_nxt = 1;
+        direction_of_bounce(screen_multi, pos_of_player_1, pos_of_player_2, fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt);
      end
-
-     else if(x_pos_of_ball <= 100 && state_nxt == FLY && fly_W) begin
+     else if(x_pos_of_ball <= x_player2_bounce && state_nxt == FLY) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_E_nxt = 1;
+        direction_of_bounce(screen_multi, pos_of_player_1, pos_of_player_2, fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt);
      end
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
