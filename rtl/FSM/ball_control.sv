@@ -46,6 +46,9 @@
  logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
  logic fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt;
  //variables
+ logic [3:0] points_player_1_nxt;
+ logic [3:0] points_player_2_nxt;
+
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
 
@@ -165,6 +168,16 @@
      end
  end
 
+ always_ff @(posedge clk65MHz) begin
+     if(rst || screen_idle) begin
+        points_player_1 <= '0;
+        points_player_2 <= '0;
+     end else begin
+        points_player_1 <= points_player_1_nxt;
+        points_player_2 <= points_player_2_nxt;
+     end
+ end
+
  always_comb begin : state_selector
     if(screen_idle) begin
        state_nxt = IDLE;
@@ -191,6 +204,8 @@
 
  always_comb begin : action_for_states //seems fine
     reached_max = '0;
+    points_player_1_nxt = points_player_1;
+    points_player_2_nxt = points_player_2;
      case (state)
         IDLE:    begin
                     x_pos_of_ball_nxt = 11'd504;
@@ -210,6 +225,7 @@
                     end
                  end
         P_SCOR:  begin
+            //glide to the end
                     if(end_of_frame) begin
                         if(x_pos_of_ball > 1022 - speed_of_ball || x_pos_of_ball < speed_of_ball + 1) begin
                             x_pos_of_ball_nxt = x_pos_of_ball;
@@ -223,6 +239,12 @@
                     end else begin
                         x_pos_of_ball_nxt = x_pos_of_ball;
                         y_pos_of_ball_nxt = y_pos_of_ball;
+                    end
+            //count points
+                    if(x_pos_of_ball < 1023/2) begin
+                        points_player_1_nxt = points_player_1 + 1;
+                    end else begin
+                        points_player_2_nxt = points_player_2 + 1;
                     end
                  end
 
