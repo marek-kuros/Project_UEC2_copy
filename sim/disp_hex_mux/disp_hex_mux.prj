@@ -1,0 +1,14 @@
+# Copyright (C) 2023  AGH University of Science and Technology
+# MTM UEC2
+#
+# Description:
+# List of files defining the modules used during the test.
+# Specify the file paths relative to THIS file.
+# For syntax detail see AMD Xilinx UG 900:
+# https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
+
+
+sv work ../../rtl/variables/vga_pkg.sv \
+        ../../rtl/points_printer/disp_hex_mux.v \
+        ../../rtl/interface/vga_if.sv \
+           disp_hex_mux_tb.sv
