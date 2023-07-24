@@ -65,7 +65,7 @@ wire [7:0] char_pixel;
 wire [7:0] char_xy;
 wire [3:0] char_line;
 
-wire [0:3] points_player_1, points_player_2;
+wire [3:0] points_player_1, points_player_2;
 
 wire screen_idle, screen_single, screen_multi;
 wire end_of_frame;
@@ -270,12 +270,12 @@ draw_ball #(
 );
 
 disp_hex_mux u_disp_hex_mux(
-    .clk(clk65MHz),
+    .clk(clk50),
     .reset(rst),
 
-    .hex0(0), //player 1 score
+    .hex0(4'b0000), //player 1 score
     .hex1(points_player_1),
-    .hex2(0), //player 2 score
+    .hex2(4'b0000), //player 2 score
     .hex3(points_player_2),
 
     .dp_in(4'b1111),

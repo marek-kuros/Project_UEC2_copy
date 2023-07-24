@@ -46,8 +46,8 @@
  logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
  logic fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt;
  //variables
- logic [3:0] points_player_1_nxt;
- logic [3:0] points_player_2_nxt;
+ logic [3:0] points_player_1_nxt = '0;
+ logic [3:0] points_player_2_nxt = '0;
 
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
@@ -61,7 +61,8 @@
     IDLE   = 3'b000,
     START  = 3'b001,
     FLY    = 3'b010,
-    P_SCOR = 3'b011   
+    P_SCOR = 3'b011,
+    WIN    = 3'b100   
     
  } STATE;
 
@@ -117,7 +118,7 @@
                 if(y_pos_of_ball + size_of_ball >= pos_player_1 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/3) begin
                     fly_NW_nxt = 1;
                 end
-                else if(y_pos_of_ball + size_of_ball >= pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/2) begin
+                else if(y_pos_of_ball + size_of_ball >= pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
                     fly_W_nxt = 1;
                 end
                 else begin
@@ -127,7 +128,7 @@
                 if(y_pos_of_ball + size_of_ball >= pos_player_2 && y_pos_of_ball + size_of_ball < pos_player_2 + y_size_of_racket/3) begin
                     fly_NE_nxt = 1;
                 end
-                else if(y_pos_of_ball + size_of_ball >= pos_player_2 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_2 + y_size_of_racket/2) begin
+                else if(y_pos_of_ball + size_of_ball >= pos_player_2 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_2 + y_size_of_racket/2 + size_of_ball) begin
                     fly_E_nxt = 1;
                 end
                 else begin
@@ -168,8 +169,8 @@
      end
  end
 
- always_ff @(posedge clk65MHz) begin
-     if(rst || screen_idle) begin
+ always_ff @(posedge clk65MHz) begin : ff_for_points_counter
+     if(rst) begin
         points_player_1 <= '0;
         points_player_2 <= '0;
      end else begin
@@ -195,7 +196,18 @@
                             state_nxt = FLY;
                         end
                     end
-            P_SCOR: state_nxt = reached_max ? START : P_SCOR;
+            P_SCOR: begin
+                        if(reached_max) begin
+                            if(points_player_1 == 15 || points_player_2 == 15) begin
+                                state_nxt = WIN;
+                            end else begin
+                                state_nxt = START;
+                            end
+                        end else begin
+                            state_nxt = P_SCOR;
+                        end
+                    end
+            WIN:    state_nxt = serve ? IDLE : WIN;
 
             default: state_nxt = IDLE;
         endcase
@@ -204,8 +216,6 @@
 
  always_comb begin : action_for_states //seems fine
     reached_max = '0;
-    points_player_1_nxt = points_player_1;
-    points_player_2_nxt = points_player_2;
      case (state)
         IDLE:    begin
                     x_pos_of_ball_nxt = 11'd504;
@@ -240,12 +250,10 @@
                         x_pos_of_ball_nxt = x_pos_of_ball;
                         y_pos_of_ball_nxt = y_pos_of_ball;
                     end
-            //count points
-                    if(x_pos_of_ball < 1023/2) begin
-                        points_player_1_nxt = points_player_1 + 1;
-                    end else begin
-                        points_player_2_nxt = points_player_2 + 1;
-                    end
+                 end
+        WIN:     begin
+                    x_pos_of_ball_nxt = x_pos_of_ball;
+                    y_pos_of_ball_nxt = y_pos_of_ball;
                  end
 
         default: begin
@@ -288,7 +296,7 @@
      end
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_E_nxt = 1;
+        fly_W_nxt = 1;
      end
      else begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
@@ -326,9 +334,41 @@
     endcase
 end
 
+ always_comb begin : comb_logic_for_points
+    if(state == IDLE || rst) begin
+        points_player_1_nxt = '0;
+        points_player_2_nxt = '0;
+    end
+    else if(state == P_SCOR) begin
+        if(fly_SW || fly_W || fly_NW) begin
+            points_player_2_nxt = points_player_2 + 1;
+            points_player_1_nxt = points_player_1;
+        end else begin
+            points_player_1_nxt = points_player_1 + 1;
+            points_player_2_nxt = points_player_2;
+        end
+    end
+    else if(state == WIN) begin
+        points_player_1_nxt = '0;
+        if(points_player_1 == 15) begin
+            points_player_2_nxt = 1;
+        end else begin
+            points_player_2_nxt = 2;
+        end
+    end
+    else begin 
+        points_player_1_nxt = points_player_1;
+        points_player_2_nxt = points_player_2;
+    end
+ end
  //_________\\
 //  always @* begin
 //     $display("current state %s", state);
+//  end
+
+ 
+//  always @* begin
+//     $display("points %b, %b", points_player_1_nxt, points_player_2_nxt);
 //  end
 
  endmodule
