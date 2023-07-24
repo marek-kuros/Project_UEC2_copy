@@ -28,7 +28,7 @@
      inout  wire PS2Clk,
      inout  wire PS2Data,
      
-     input  wire [15:0] sw,
+     input  wire [1:0] sw,
      input  wire [7:1]  JA,
      input  wire [2:0]  JB,
 
@@ -45,8 +45,7 @@
      output wire [3:0] vgaBlue,
      output wire JA1
  );
- 
- 
+  
  /**
   * Local variables and signals
   */

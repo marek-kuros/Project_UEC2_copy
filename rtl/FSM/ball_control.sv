@@ -36,7 +36,7 @@
  localparam size_of_ball     = 15;
  localparam y_size_of_racket = 80;
 
- localparam speed_of_ball    = 5;
+ localparam speed_of_ball    = 15;
 
  //parameter logic [3:0] __|size_of_ball = 15|__
  //localparam y_size_of_racket = 80;
@@ -169,7 +169,7 @@
      end
  end
 
- always_ff @(posedge clk65MHz) begin : ff_for_points_counter
+ always @(posedge clk65MHz) begin : ff_for_points_counter
      if(rst) begin
         points_player_1 <= '0;
         points_player_2 <= '0;
@@ -197,13 +197,13 @@
                         end
                     end
             P_SCOR: begin
-                        if(reached_max) begin
-                            if(points_player_1 == 15 || points_player_2 == 15) begin
-                                state_nxt = WIN;
-                            end else begin
-                                state_nxt = START;
-                            end
-                        end else begin
+                        if(points_player_1 >= 10 || points_player_2 >= 10) begin
+                            state_nxt = WIN;
+                        end
+                        else if(reached_max) begin
+                            state_nxt = START;
+                        end
+                        else begin
                             state_nxt = P_SCOR;
                         end
                     end
@@ -253,7 +253,7 @@
                  end
         WIN:     begin
                     x_pos_of_ball_nxt = x_pos_of_ball;
-                    y_pos_of_ball_nxt = y_pos_of_ball;
+                    y_pos_of_ball_nxt = '0;
                  end
 
         default: begin
@@ -285,7 +285,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //hit racket
 
-
      else if(x_pos_of_ball >= x_player1_bounce && state_nxt == FLY) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         direction_of_bounce(screen_multi, pos_of_player_1, pos_of_player_2, fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt);
@@ -294,6 +293,9 @@
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         direction_of_bounce(screen_multi, pos_of_player_1, pos_of_player_2, fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt);
      end
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //start
+
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_W_nxt = 1;
@@ -339,21 +341,22 @@ end
         points_player_1_nxt = '0;
         points_player_2_nxt = '0;
     end
-    else if(state == P_SCOR) begin
-        if(fly_SW || fly_W || fly_NW) begin
-            points_player_2_nxt = points_player_2 + 1;
+    else if(state == P_SCOR && state_nxt == START) begin
+        if((fly_SW || fly_W || fly_NW)) begin
+            points_player_2_nxt = points_player_2 + 1'b1;
             points_player_1_nxt = points_player_1;
         end else begin
-            points_player_1_nxt = points_player_1 + 1;
+            points_player_1_nxt = points_player_1 + 1'b1;
             points_player_2_nxt = points_player_2;
         end
     end
     else if(state == WIN) begin
-        points_player_1_nxt = '0;
-        if(points_player_1 == 15) begin
+        if(points_player_1 >= points_player_2) begin
             points_player_2_nxt = 1;
+            points_player_1_nxt = '0;
         end else begin
             points_player_2_nxt = 2;
+            points_player_1_nxt = '0;
         end
     end
     else begin 
@@ -362,13 +365,14 @@ end
     end
  end
  //_________\\
-//  always @* begin
-//     $display("current state %s", state);
-//  end
-
+  always @* begin
+    if(state == WIN)
+        $display("current state %s", state);
+  end
  
-//  always @* begin
-//     $display("points %b, %b", points_player_1_nxt, points_player_2_nxt);
-//  end
+ 
+ always @* begin
+    $display("points %b, %b", points_player_1, points_player_2);
+ end
 
  endmodule

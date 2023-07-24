@@ -27,7 +27,7 @@ module top
 
     input  logic serve,
 
-    input  logic [15:0] sw,
+    input  logic [1:0] sw,
 
     input  logic [9:0] input_pos,
     output logic [9:0] output_pos,

@@ -12,7 +12,7 @@ module select_game_sm(
     input  logic rst,
     input  logic clk65MHz,
     
-    input  logic [15:0] sw,
+    input  logic [1:0] sw,
 
     output logic screen_idle,
     output logic screen_single,

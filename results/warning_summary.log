@@ -1,26 +1,12 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-24 10:20:48
+Created: 2023-07-24 19:17:33
 
 ----SYNTHESIS----
 WARNING: [Synth 8-6014] Unused sequential element set_x.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:450]
 WARNING: [Synth 8-6014] Unused sequential element set_x.x_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:456]
 WARNING: [Synth 8-6014] Unused sequential element set_y.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:514]
 WARNING: [Synth 8-6014] Unused sequential element set_y.y_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:520]
-WARNING: [Synth 8-7129] Port sw[15] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[14] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[13] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[12] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[11] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[10] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[9] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[8] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[7] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[6] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[5] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[4] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[3] in module select_game_sm is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[2] in module select_game_sm is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load
@@ -32,20 +18,6 @@ WARNING: [Synth 8-7129] Port input_pos[2] in module top is either unconnected or
 WARNING: [Synth 8-7129] Port input_pos[1] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[0] in module top is either unconnected or has no load
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-WARNING: [Synth 8-7129] Port sw[15] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[14] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[13] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[12] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[11] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[10] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[9] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[8] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[7] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[6] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[5] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[4] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[3] in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port sw[2] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load
