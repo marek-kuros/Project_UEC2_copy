@@ -70,6 +70,8 @@ wire [3:0] points_player_1, points_player_2;
 wire screen_idle, screen_single, screen_multi;
 wire end_of_frame;
 
+wire [1:0] who_won;
+
 /////////////////////////////////////////////////////////
 
 wire [10:0] x_pos_of_ball;
@@ -273,10 +275,10 @@ disp_hex_mux u_disp_hex_mux(
     .clk(clk50),
     .reset(rst),
 
-    .hex0(4'b0000), //player 1 score
-    .hex1(points_player_1),
-    .hex2(4'b0000), //player 2 score
-    .hex3(points_player_2),
+    .hex0({2'b0, who_won}), //player 2 score
+    .hex1(points_player_2),
+    .hex2({2'b0, who_won}), //player 1 score
+    .hex3(points_player_1),
 
     .dp_in(4'b1111),
     .an(an),
@@ -295,6 +297,8 @@ ball_control u_ball_control(
     .screen_multi(screen_multi),
     .points_player_1(points_player_1),
     .points_player_2(points_player_2),
+
+    .who_won(who_won),
 
     .x_pos_of_ball(x_pos_of_ball),
     .y_pos_of_ball(y_pos_of_ball)

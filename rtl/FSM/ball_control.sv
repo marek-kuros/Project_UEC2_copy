@@ -25,6 +25,8 @@
      output logic [3:0] points_player_1,
      output logic [3:0] points_player_2,
 
+     output logic [1:0] who_won,
+
      output logic [10:0] x_pos_of_ball,
      output logic [10:0] y_pos_of_ball
 
@@ -45,6 +47,8 @@
  //flag
  logic fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE;
  logic fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt;
+
+ logic reached_max;
  //variables
  logic [3:0] points_player_1_nxt = '0;
  logic [3:0] points_player_2_nxt = '0;
@@ -52,7 +56,7 @@
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
 
- logic reached_max;
+ logic [1:0] who_won_nxt; 
 
  integer x_speed, y_speed;
  //typedef for FSM
@@ -179,6 +183,14 @@
      end
  end
 
+ always @(posedge clk65MHz) begin : ff_for_showing_winner
+    if(rst) begin
+        who_won <= '0;
+    end else begin
+        who_won <= who_won_nxt;
+    end
+end
+
  always_comb begin : state_selector
     if(screen_idle) begin
        state_nxt = IDLE;
@@ -197,7 +209,7 @@
                         end
                     end
             P_SCOR: begin
-                        if(points_player_1 >= 10 || points_player_2 >= 10) begin
+                        if(points_player_1 >= 10 || points_player_2 >= 10) begin // in order to uses the same screen for points make flag here
                             state_nxt = WIN;
                         end
                         else if(reached_max) begin
@@ -298,7 +310,7 @@
 
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_W_nxt = 1;
+        fly_E_nxt = 1;
      end
      else begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
@@ -336,7 +348,8 @@
     endcase
 end
 
- always_comb begin : comb_logic_for_points
+ always_comb begin : comb_logic_for_points_and_winner_showing
+    who_won_nxt = 0;
     if(state == IDLE || rst) begin
         points_player_1_nxt = '0;
         points_player_2_nxt = '0;
@@ -351,12 +364,12 @@ end
         end
     end
     else if(state == WIN) begin
-        if(points_player_1 >= points_player_2) begin
-            points_player_2_nxt = 1;
-            points_player_1_nxt = '0;
+        points_player_1_nxt = points_player_1;
+        points_player_2_nxt = points_player_2;
+        if(points_player_1 > points_player_2) begin
+            who_won_nxt = 2;
         end else begin
-            points_player_2_nxt = 2;
-            points_player_1_nxt = '0;
+            who_won_nxt = 1;
         end
     end
     else begin 
@@ -372,7 +385,7 @@ end
  
  
  always @* begin
-    $display("points %b, %b", points_player_1, points_player_2);
+    $display("points %b, %b, %d", points_player_1, points_player_2, who_won_nxt);
  end
 
  endmodule
