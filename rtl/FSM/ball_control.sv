@@ -38,7 +38,7 @@
  localparam size_of_ball     = 15;
  localparam y_size_of_racket = 80;
 
- localparam speed_of_ball    = 15;
+ localparam speed_of_ball    = 3;
 
  //parameter logic [3:0] __|size_of_ball = 15|__
  //localparam y_size_of_racket = 80;
@@ -86,27 +86,27 @@
                 state_out = FLY;
             end
         end else begin // logic for single
-            if(y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket) begin
+            if(x_pos_of_ball >= x_player1_bounce - size_of_ball && (y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket)) begin
                 state_out = P_SCOR;
             end 
-            else if(y_pos_of_ball + size_of_ball < 717 - pos_player_1 || y_pos_of_ball > 717 - pos_player_1 + y_size_of_racket) begin
+            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball + size_of_ball < 717 - pos_player_1 || y_pos_of_ball > 717 - pos_player_1 + y_size_of_racket)) begin
                 state_out = P_SCOR;
 
             end
-            else if(pos_player_1 >= 717) begin
-                if(y_pos_of_ball > y_size_of_racket + 51) begin
-                    state_out = P_SCOR;
-                end else begin
-                    state_out = FLY;
-                end
-            end
-            else if(pos_player_1 <= 51) begin
-                if(y_pos_of_ball < 717) begin
-                    state_out = P_SCOR;
-                end else begin
-                    state_out = FLY;
-                end
-            end
+            // else if(pos_player_1 >= 717) begin
+            //     if(y_pos_of_ball > y_size_of_racket + 51) begin
+            //         state_out = P_SCOR;
+            //     end else begin
+            //         state_out = FLY;
+            //     end
+            // end
+            // else if(pos_player_1 <= 51) begin
+            //     if(y_pos_of_ball < 717) begin
+            //         state_out = P_SCOR;
+            //     end else begin
+            //         state_out = FLY;
+            //     end
+            // end
             else begin
                 state_out = FLY;
             end
@@ -140,9 +140,28 @@
                 end
             end
         end else begin
-
+            if(x_pos_of_ball >= x_player1_bounce - size_of_ball) begin
+                if(y_pos_of_ball + size_of_ball >= pos_player_1 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/3) begin
+                    fly_NW_nxt = 1;
+                end
+                else if(y_pos_of_ball + size_of_ball >= pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
+                    fly_W_nxt = 1;
+                end
+                else begin
+                    fly_SW_nxt = 1;
+                end
+            end else begin
+                if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/3) begin
+                    fly_NE_nxt = 1;
+                end
+                else if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
+                    fly_E_nxt = 1;
+                end
+                else begin
+                    fly_SE_nxt = 1;
+                end
+            end
         end
-
     end
  endtask
  /*********************************************************************/
@@ -310,7 +329,7 @@ end
 
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_E_nxt = 1;
+        fly_W_nxt = 1;
      end
      else begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
