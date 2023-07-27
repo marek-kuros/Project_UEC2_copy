@@ -1,12 +1,8 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-26 12:49:21
+Created: 2023-07-27 12:38:17
 
 ----SYNTHESIS----
-WARNING: [Synth 8-6014] Unused sequential element set_x.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:450]
-WARNING: [Synth 8-6014] Unused sequential element set_x.x_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:456]
-WARNING: [Synth 8-6014] Unused sequential element set_y.inc_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:514]
-WARNING: [Synth 8-6014] Unused sequential element set_y.y_inter_reg was removed.  [rtl/mouse_control/MouseCtl.vhd:520]
 WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load

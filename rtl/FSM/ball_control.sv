@@ -38,7 +38,9 @@
  localparam size_of_ball     = 15;
  localparam y_size_of_racket = 80;
 
- localparam speed_of_ball    = 3;
+ localparam speed_of_ball    = 10;
+
+ //localparam probability_dividend = 127;
 
  //parameter logic [3:0] __|size_of_ball = 15|__
  //localparam y_size_of_racket = 80;
@@ -56,7 +58,9 @@
  logic [10:0] x_pos_of_ball_nxt;
  logic [10:0] y_pos_of_ball_nxt;
 
- logic [1:0] who_won_nxt; 
+ logic [1:0] who_won_nxt;
+
+ logic [6:0] random_counter, random_counter_nxt;
 
  integer x_speed, y_speed;
  //typedef for FSM
@@ -192,7 +196,7 @@
      end
  end
 
- always @(posedge clk65MHz) begin : ff_for_points_counter
+ always_ff @(posedge clk65MHz) begin : ff_for_points_counter
      if(rst) begin
         points_player_1 <= '0;
         points_player_2 <= '0;
@@ -202,13 +206,21 @@
      end
  end
 
- always @(posedge clk65MHz) begin : ff_for_showing_winner
+ always_ff @(posedge clk65MHz) begin : ff_for_showing_winner
     if(rst) begin
         who_won <= '0;
     end else begin
         who_won <= who_won_nxt;
     end
 end
+
+ always_ff @(posedge clk65MHz) begin : ff_for_random_counter //random_counter
+     if(rst) begin
+        random_counter <= '0;
+     end else begin
+        random_counter <= random_counter_nxt;
+     end
+ end
 
  always_comb begin : state_selector
     if(screen_idle) begin
@@ -233,6 +245,9 @@ end
                         end
                         else if(reached_max) begin
                             state_nxt = START;
+                        end
+                        else if(!screen_multi) begin
+                            state_nxt = WIN;
                         end
                         else begin
                             state_nxt = P_SCOR;
@@ -329,7 +344,28 @@ end
 
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        fly_W_nxt = 1;
+        // 15% probability for each of going sw nw ne se and 20% each of e and w
+        //go somwhere west
+        if(random_counter <= 19) begin //doesn't like multiplying by fraction
+            fly_SW_nxt = 1;
+        end
+        else if(random_counter > 19 && random_counter <= 38) begin
+            fly_NW_nxt = 1;
+        end
+        else if(random_counter > 38 && random_counter <= 64) begin
+            fly_W_nxt = 1;
+        end
+        //go somwhere eeast
+        else if(random_counter > 64 && random_counter <= 89) begin
+            fly_E_nxt = 1;
+        end
+        else if(random_counter > 89 && random_counter <= 108) begin
+            fly_NE_nxt = 1;
+        end
+        else begin
+            fly_SE_nxt = 1;
+        end
+
      end
      else begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
@@ -385,7 +421,12 @@ end
     else if(state == WIN) begin
         points_player_1_nxt = points_player_1;
         points_player_2_nxt = points_player_2;
-        if(points_player_1 > points_player_2) begin
+        if(!screen_multi) begin
+            points_player_1_nxt = '0; 
+            points_player_2_nxt = '0;
+            who_won_nxt         = 1;
+        end
+        else if(points_player_1 > points_player_2) begin
             who_won_nxt = 2;
         end else begin
             who_won_nxt = 1;
@@ -396,6 +437,11 @@ end
         points_player_2_nxt = points_player_2;
     end
  end
+
+ always_comb begin
+    random_counter_nxt = random_counter + 1;
+ end
+
  //_________\\
   always @* begin
     if(state == WIN)
