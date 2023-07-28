@@ -1,8 +1,9 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-27 12:38:17
+Created: 2023-07-28 14:48:46
 
 ----SYNTHESIS----
+WARNING: [Synth 8-6014] Unused sequential element random_counter_reg was removed.  [rtl/FSM/ball_control.sv:218]
 WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[8] in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port input_pos[7] in module top is either unconnected or has no load

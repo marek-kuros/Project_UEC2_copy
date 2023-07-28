@@ -67,7 +67,7 @@ task GameScreen(input logic [10:0] vcount, hcount);
     if(vcount < 51 || vcount > 717) begin
         rgb_nxt = 12'hf_f_f;
     end
-    else if(hcount > 505 && hcount < 517) begin
+    else if(hcount > 507 && hcount < 517) begin
         rgb_nxt = 12'hf_f_f;
     end
     else begin
