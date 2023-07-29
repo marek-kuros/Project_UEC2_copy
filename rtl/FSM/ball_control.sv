@@ -92,7 +92,7 @@
             if(x_pos_of_ball >= x_player1_bounce - size_of_ball && (y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket)) begin
                 state_out = P_SCOR;
             end 
-            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball < 717 - pos_player_1 || y_pos_of_ball + size_of_ball> 717 - pos_player_1 + y_size_of_racket)) begin
+            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball + size_of_ball < 688 - pos_player_1 || y_pos_of_ball > 770 - pos_player_1)) begin
                 state_out = P_SCOR;
 
             end
@@ -154,15 +154,16 @@
                     fly_SW_nxt = 1;
                 end
             end else begin
-                if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/3) begin
-                    fly_NE_nxt = 1;
-                end
-                else if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
-                    fly_E_nxt = 1;
-                end
-                else begin
-                    fly_SE_nxt = 1;
-                end
+                // if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/3) begin
+                //     fly_NE_nxt = 1;
+                // end
+                // else if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
+                //     fly_E_nxt = 1;
+                // end
+                // else begin
+                //     fly_SE_nxt = 1;
+                // end
+                fly_E_nxt = 1;
             end
         end
     end
@@ -180,7 +181,7 @@
  always_ff @(posedge clk65MHz) begin : ff_for_position_outputs
      if(rst) begin
         x_pos_of_ball <= 11'd504;
-        y_pos_of_ball <= 11'd377;
+        y_pos_of_ball <= 11'd376;
      end else begin
         x_pos_of_ball <= x_pos_of_ball_nxt;
         y_pos_of_ball <= y_pos_of_ball_nxt;
@@ -264,7 +265,7 @@ end
      case (state)
         IDLE:    begin
                     x_pos_of_ball_nxt = 11'd504;
-                    y_pos_of_ball_nxt = 11'd376;
+                    y_pos_of_ball_nxt = 11'd376; //d376
                  end
         START:   begin
                     x_pos_of_ball_nxt = 11'd504;
@@ -443,14 +444,17 @@ end
  end
 
  //_________\\
-  always @* begin
-    if(state == WIN)
-        $display("current state %s", state);
-  end
+//   always @* begin
+//     if(state == WIN)
+//         $display("current state %s", state);
+//   end
  
  
- always @* begin
-    $display("points %b, %b, %d", points_player_1, points_player_2, who_won_nxt);
- end
+//  always @* begin
+//     $display("points %b, %b, %d", points_player_1, points_player_2, who_won_nxt);
+//  end
 
+//  always @* begin
+//     $display(fly_E | fly_NE | fly_SE);
+//  end
  endmodule

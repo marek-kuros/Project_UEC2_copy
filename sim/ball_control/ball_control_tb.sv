@@ -420,10 +420,10 @@ module ball_control_tb;
 
     //assign block
     assign screen_idle = 0;
-    assign screen_multi = 1;
+    assign screen_multi = 0;
     assign end_of_frame = 1;
 
-    assign pos_of_player_1 = 10'd377;
+    assign pos_of_player_1 = 10'd52; //377
     assign pos_of_player_2 = 10'd377;
     
     //assign serve = 1;
