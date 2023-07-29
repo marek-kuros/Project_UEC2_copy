@@ -92,7 +92,7 @@
             if(x_pos_of_ball >= x_player1_bounce - size_of_ball && (y_pos_of_ball + size_of_ball < pos_player_1 || y_pos_of_ball > pos_player_1 + y_size_of_racket)) begin
                 state_out = P_SCOR;
             end 
-            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball + size_of_ball < 688 - pos_player_1 || y_pos_of_ball > 770 - pos_player_1)) begin
+            else if(x_pos_of_ball <= x_player2_bounce && (y_pos_of_ball + size_of_ball < 688 - pos_player_1 || y_pos_of_ball > 768 - pos_player_1)) begin //770 a bit easier for player
                 state_out = P_SCOR;
 
             end
@@ -154,16 +154,15 @@
                     fly_SW_nxt = 1;
                 end
             end else begin
-                // if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/3) begin
-                //     fly_NE_nxt = 1;
-                // end
-                // else if(y_pos_of_ball + size_of_ball >= 717 - pos_player_1 + y_size_of_racket/3 && y_pos_of_ball + size_of_ball < 717 - pos_player_1 + y_size_of_racket/2 + size_of_ball) begin
-                //     fly_E_nxt = 1;
-                // end
-                // else begin
-                //     fly_SE_nxt = 1;
-                // end
-                fly_E_nxt = 1;
+                if(y_pos_of_ball + size_of_ball >= 768 - 3*31 - pos_player_1 && y_pos_of_ball + size_of_ball < 768 - 2*31 - pos_player_1) begin //no variables due to try and error methodology
+                    fly_NE_nxt = 1;
+                end
+                else if(y_pos_of_ball + size_of_ball >= 768 - 2*31 - pos_player_1 && y_pos_of_ball + size_of_ball < 768 - 31 - pos_player_1) begin
+                    fly_E_nxt = 1;
+                end
+                else begin
+                    fly_SE_nxt = 1;
+                end
             end
         end
     end
@@ -344,29 +343,28 @@ end
 
      else if(state == START) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
-        // // 15% probability for each of going sw nw ne se and 20% each of e and w
+        // 15% probability for each of going sw nw ne se and 20% each of e and w
 
-        // //go somwhere west
-        // if(random_counter <= 19) begin //doesn't like multiplying by fraction
-        //     fly_SW_nxt = 1;
-        // end
-        // else if(random_counter > 19 && random_counter <= 38) begin
-        //     fly_NW_nxt = 1;
-        // end
-        // else if(random_counter > 38 && random_counter <= 64) begin
-        //     fly_W_nxt = 1;
-        // end
-        // //go somwhere eeast
-        // else if(random_counter > 64 && random_counter <= 89) begin
-        //     fly_E_nxt = 1;
-        // end
-        // else if(random_counter > 89 && random_counter <= 108) begin
-        //     fly_NE_nxt = 1;
-        // end
-        // else begin
-        //     fly_SE_nxt = 1;
-        // end
-        fly_W_nxt = 1;
+        //go somwhere west
+        if(random_counter <= 19) begin //doesn't like multiplying by fraction
+            fly_SW_nxt = 1;
+        end
+        else if(random_counter > 19 && random_counter <= 38) begin
+            fly_NW_nxt = 1;
+        end
+        else if(random_counter > 38 && random_counter <= 64) begin
+            fly_W_nxt = 1;
+        end
+        //go somwhere eeast
+        else if(random_counter > 64 && random_counter <= 89) begin
+            fly_E_nxt = 1;
+        end
+        else if(random_counter > 89 && random_counter <= 108) begin
+            fly_NE_nxt = 1;
+        end
+        else begin
+            fly_SE_nxt = 1;
+        end
      end
      else begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = {fly_SW, fly_W, fly_NW, fly_NE, fly_E, fly_SE};
