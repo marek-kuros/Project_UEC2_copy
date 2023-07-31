@@ -1,4 +1,4 @@
-# uec2_example_project_RnD
+# UEC2 Projekt - gra ping-pong
 
 ## Klonowanie repozytorium
 
