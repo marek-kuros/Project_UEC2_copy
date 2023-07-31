@@ -2,7 +2,7 @@
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
  * Author: Piotr Kaczmarczyk
- *
+ * Modified by: Marek Kuros
  * Description:
  * Draw background.
  */
@@ -21,7 +21,6 @@ module draw_bg
         input  logic clk65MHz,
         input  logic rst,    
         
-        // input  logic screen_idle,
         input  logic screen_single,
         input  logic screen_multi,
 
@@ -34,10 +33,6 @@ import vga_pkg::*;
 /**
  * Local variables and signals
  */
-
-// reg [11:0] rom [560448:0];
-
-// initial $readmemh("../../rtl/background_pic/ekran_startowy.dat", rom);
 
 logic [11:0] rgb_nxt = '0;
 /**

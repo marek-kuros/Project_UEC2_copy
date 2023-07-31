@@ -1,6 +1,6 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2023-07-29 17:05:25
+Created: 2023-07-31 10:24:14
 
 ----SYNTHESIS----
 WARNING: [Synth 8-7129] Port input_pos[9] in module top is either unconnected or has no load

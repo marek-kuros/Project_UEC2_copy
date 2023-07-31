@@ -2,6 +2,7 @@
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
  * Author: Piotr Kaczmarczyk
+ * Modified by Marek Kuros
  *
  * Description:
  * Package with vga related constants.

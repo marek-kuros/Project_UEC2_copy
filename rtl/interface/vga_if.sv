@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2023  AGH University of Science and Technology
+ * MTM UEC2
+ * Author: Marek Kuros
+ * Description:
+ * Interface connecting similar signals.
+ */
+
 interface vga_if;
 
     logic [10:0] vcount;

@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2023  AGH University of Science and Technology
+ * MTM UEC2
+ * Author: Marek Kuros
+ * Description:
+ * Array for writing sth in the picture.
+ */
+
 module char_rom_16x16(
     input  logic [7:0] char_xy,
     input  logic [3:0] char_line,

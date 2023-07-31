@@ -1,6 +1,7 @@
 # Copyright (C) 2023  AGH University of Science and Technology
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
+# Modified by: Marek Kuros
 #
 # Description:
 # List of files defining the modules used during the test.
@@ -14,13 +15,13 @@ sv work ../../rtl/variables/vga_pkg.sv \
         ../../rtl/char_pic/draw_rect_char.sv \
         ../../rtl/display_timing/vga_timing.sv \
         ../../rtl/interface/vga_if.sv \
-        ../../rtl/mouse_control/draw_mouse.sv \
         ../../rtl/rectangle_pic/draw_rect_ctl.sv \
         ../../rtl/synchronization/sync.sv \
         ../../rtl/top/top.sv \
         ../../rtl/FSM/select_game_sm.sv \
-        ../../rtl/background_pic/draw_bg.sv \
         ../../rtl/ball/ball.sv \
+        ../../rtl/FSM/ball_control.sv \
+        ../../rtl/background_pic/draw_bg.sv \
         ../../fpga/rtl/top_basys3.sv \
         ../common/tiff_writer.sv \
         top_fpga_tb.sv      
@@ -33,5 +34,4 @@ verilog work ../common/glbl.v \
              ../../rtl/points_printer/disp_hex_mux.v
 
 vhdl work    ../../rtl/mouse_control/MouseCtl.vhd \
-             ../../rtl/mouse_control/Ps2Interface.vhd \
-             ../../rtl/mouse_control/MouseDisplay.vhd
+             ../../rtl/mouse_control/Ps2Interface.vhd

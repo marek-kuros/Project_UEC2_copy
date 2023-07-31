@@ -1,9 +1,9 @@
 /**
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
- * Author:
+ * Author: Marek Kuros
  * Description:
- * Draw rectangle.
+ * Draw letters.
  */
 
 

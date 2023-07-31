@@ -2,7 +2,7 @@
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
  * Author: Piotr Kaczmarczyk
- *
+ * Modified by: Marek Kuros
  * Description:
  * Vga timing controller.
  */
@@ -32,8 +32,8 @@ logic hblnk_nxt = '0, hsync_nxt = '0, vsync_nxt = '0, vblnk_nxt = '0;
 logic end_of_frame_nxt = '0;
 
 // Describe the actual circuit for the assignment.
-// Video timing controller set for 800x600@60fps
-// using a 40 MHz pixel clock per VESA spec.
+// Video timing controller set for 1024x768@60fps
+// using a 65 MHz pixel clock per VESA spec.
 
 always_ff @(posedge clk65MHz) begin
     if(rst) begin

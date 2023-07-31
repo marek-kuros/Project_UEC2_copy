@@ -9,7 +9,7 @@
  * Piotr Kaczmarczyk
  * 
  * Modified even more by:
- * Marek
+ * Marek Kuros
  *
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.

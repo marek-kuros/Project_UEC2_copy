@@ -3,7 +3,7 @@
  * MTM UEC2
  * Author: Marek Kuros
  * Description:
- * .select_game_sm
+ * selecting game module
  */
 
 `timescale 1 ns / 1 ps

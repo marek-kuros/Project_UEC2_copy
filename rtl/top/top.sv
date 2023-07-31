@@ -9,7 +9,7 @@
  * Piotr Kaczmarczyk
  *
  * Modified by:
- * Marek
+ * Marek Kuros
  * 
  * Description:
  * The project top module.
@@ -113,27 +113,12 @@ draw_bg u_draw_bg (
     .clk65MHz,
     .rst,
 
-    // .screen_idle(screen_idle),
     .screen_single(screen_single),
     .screen_multi(screen_multi),
 
     .timing_if(timing_if.bg_in),
     .draw_bg_if(draw_bg_if.out)
 );
-
-// draw_rect u_draw_rect(
-//     .clk65MHz,
-//     .rst,
-
-//     .x_start(x_out_ff),
-//     .y_start(y_out_ff),
-
-//     .pixel_addr(address),
-//     .rgb_pixel(rgb_pixel),
-
-//     .draw_bg_if(sync_if.in),
-//     .draw_rect_if(draw_rect_if.out)
-// );
 
 MouseCtl u_MouseCtl(
     .ps2_clk(ps2_clk),
@@ -154,19 +139,6 @@ MouseCtl u_MouseCtl(
     .rst(rst)
 );
 
-// draw_mouse u_draw_mouse(
-//     .clk65MHz,
-//     .rst,
-
-//     // .x_start(x_ff),
-//     // .y_start(y_ff),
-
-//     //.enable_mouse_display_out(),
-
-//     .draw_rect_if(draw_rect_if.in),
-//     .draw_mouse_if(draw_mouse_if.out)
-// );
-
 sync u_sync(
     .clk50,
     .clk65MHz,
@@ -185,12 +157,6 @@ sync u_sync(
     .ypos_out(y_ff)
 );
 
-// image_rom u_image_rom(
-//     .clk(clk65MHz),
-//     .address(address),
-//     .rgb(rgb_pixel)
-// );
-
 draw_rect_ctl #(
     .x_fix_position_player_1(923),
     .x_fix_position_player_2(100),
@@ -200,12 +166,10 @@ draw_rect_ctl #(
     .rst(rst),
     .clk65MHz(clk65MHz),
 
-    //.mouse_xpos(x_ff),
     .mouse_ypos(y_ff),
 
     .screen_idle(screen_idle),
     .screen_single(screen_single),
-    //.screen_multi(screen_multi),
 
     .input_pos(/*input_pos*/ 10'd377),
     .output_pos(output_pos),
@@ -226,8 +190,6 @@ draw_rect_char #(
     .draw_rect_char_if(draw_rect_char_if.out),
 
     .screen_idle(screen_idle),
-    // .screen_single(screen_single),
-    // .screen_multi(screen_multi),
 
     .char_xy(char_xy),
     .char_line(char_line),

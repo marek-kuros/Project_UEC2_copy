@@ -1,4 +1,5 @@
 // Listing 4.15
+// Module copied from uart assignment
 module disp_hex_mux
    (
     input wire clk, reset,

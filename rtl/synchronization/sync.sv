@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2023  AGH University of Science and Technology
+ * MTM UEC2
+ * Author: Marek Kuros
+ * Description:
+ * Module for overcomming timing violations.
+ */
 module sync(
     input logic rst,
     input logic clk65MHz,

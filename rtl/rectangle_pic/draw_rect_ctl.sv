@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
- * Author: Marek
+ * Author: Marek Kuros
  * Description:
  * Module for drawing "racket".
  */
@@ -18,13 +18,11 @@ module draw_rect_ctl
 (
     input  logic clk65MHz,
     input  logic rst,
-    
-    //input  logic [11:0] mouse_xpos,
+
     input  logic [11:0] mouse_ypos,
 
     input  logic screen_idle,
     input  logic screen_single,
-    //input  logic screen_multi,
 
     input  logic [9:0] input_pos,
     output logic [9:0] output_pos,

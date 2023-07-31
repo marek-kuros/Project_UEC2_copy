@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
- * Author: Marek
+ * Author: Marek Kuros
  * Description:
  * Module for drawing ball.
  */
@@ -16,12 +16,8 @@
  (
      input  logic clk65MHz,
      input  logic rst,
-     
-     //input  logic [11:0] mouse_xpos,
 
      input  logic screen_idle,
-     //input  logic screen_single,
-     //input  logic screen_multi,
  
      input  logic [10:0] x_pos_of_ball,
      input  logic [10:0] y_pos_of_ball,

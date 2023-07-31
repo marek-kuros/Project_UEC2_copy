@@ -1,6 +1,7 @@
 # Copyright (C) 2023  AGH University of Science and Technology
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
+# Modified by: Marek Kuros
 #
 # Description:
 # Project detiles required for generate_bitstream.tcl
@@ -37,7 +38,6 @@ set sv_files {
     ../rtl/char_pic/draw_rect_char.sv
     ../rtl/display_timing/vga_timing.sv
     ../rtl/interface/vga_if.sv
-    ../rtl/mouse_control/draw_mouse.sv
     ../rtl/rectangle_pic/draw_rect_ctl.sv
     ../rtl/synchronization/sync.sv
     ../rtl/top/top.sv
@@ -62,11 +62,8 @@ set verilog_files {
 set vhdl_files {
    ../rtl/mouse_control/MouseCtl.vhd
    ../rtl/mouse_control/Ps2Interface.vhd
-   ../rtl/mouse_control/MouseDisplay.vhd
 }
 
 # Specify files for a memory initialization     -- EDIT
-set mem_files {
-   ../rtl/rectangle/image_rom.data
-   ../rtl/background_pic/ekran_startowy.dat
-}
+# set mem_files {
+# }
