@@ -28,6 +28,17 @@ Tryb multiplayer to klasyczny przykład gry w ping-ponga :ping_pong:. Wygrywa os
 <sub>Elementy na płytce, z których korzysta gra :point_down:</sub>
 ![basys3 - ważniejsze elementy wykorzystane do gry](/doc/basys3_picture_howtoplay.png)
 
+## Dodatkowe opcje rozgrywki
+### Gamepad niczym prawdziwa paletka :scream_cat:!
+Do wykonania paletki potrzeba:
+* esp8266 wraz z wgranym micropythonem (ścieżka do przykładowego kodu - additional_files/gamepad_ping-pong.py) - 
+[Quick reference for the ESP8266](https://docs.micropython.org/en/latest/esp8266/quickref.html#)
+![esp8266](https://m.media-amazon.com/images/I/71UyYP0vEHL._AC_UF1000,1000_QL80_.jpg)
+* akcelerometr adxl345
+![adxl345](https://kamami.pl/34556-large_default/module-with-adxl345-accelerometer.jpg)
+* kable do połączenia
+![kable goldpin](https://cdn1.botland.com.pl/104345/przewody-polaczeniowe-mesko-meskie-justpi-10cm-40szt.jpg)
+
 ## Klonowanie repozytorium
 
 ```bash
