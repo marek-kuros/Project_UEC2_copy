@@ -39,6 +39,12 @@ Do wykonania paletki potrzeba:
 * kable do połączenia
 ![kable goldpin](https://cdn1.botland.com.pl/104345/przewody-polaczeniowe-mesko-meskie-justpi-10cm-40szt.jpg)
 
+### Przykładowe połączenie gotowej "paletki"
+![ready racket](/doc/IMG_20230802_151337.jpg)
+
+### Opis działania
+Akcelerometr komunikuje się z mikrokontrolerem za pomocą protokołu I2C, natomiast płytka odpowiada za zamianę wartości przechylenia paletki na pozycję gracza, która to jest odczytywana przez układ fpga
+
 ## Klonowanie repozytorium
 
 ```bash
