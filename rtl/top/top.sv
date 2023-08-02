@@ -20,7 +20,7 @@
 module top
      (
     input  logic clk65MHz,
-    input  logic clk100MHz,
+    //input  logic clk100MHz,
     
     inout  logic ps2_clk,
     inout  logic ps2_data,
@@ -89,11 +89,11 @@ assign {r,g,b} = draw_rect_char_if.rgb;
  * Submodules instances
  */
 
- logic clk50;
+//  logic clk50;
 
-always_ff @(posedge clk100MHz) begin
-    clk50 <= ~clk50;
-end
+// always_ff @(posedge clk100MHz) begin
+//     clk50 <= ~clk50;
+// end
 
 vga_if_no_rgb timing_if();
 vga_if draw_bg_if();
@@ -135,14 +135,14 @@ MouseCtl u_MouseCtl(
     .sety(),
     .setmax_x(),
     .setmax_y(),
-    .clk(clk100MHz),
+    .clk(clk65MHz),
     .rst(rst)
 );
 
 sync u_sync(
-    .clk50,
+    //.clk50,
     .clk65MHz,
-    .clk100MHz,
+    //.clk100MHz,
     .rst,
 
     .left_in(/*left*/),
@@ -171,7 +171,7 @@ draw_rect_ctl #(
     .screen_idle(screen_idle),
     .screen_single(screen_single),
 
-    .input_pos(/*input_pos*/ 10'd377),
+    .input_pos(input_pos),
     .output_pos(output_pos),
 
     .draw_bg_if(sync_if.in),
@@ -234,7 +234,7 @@ draw_ball #(
 );
 
 disp_hex_mux u_disp_hex_mux(
-    .clk(clk50),
+    .clk(clk65MHz),
     .reset(rst),
 
     .hex0({2'b0, who_won}), //player 2 score
@@ -254,7 +254,7 @@ ball_control u_ball_control(
 
     .end_of_frame(end_of_frame),
     .pos_of_player_1(output_pos),
-    .pos_of_player_2(/*input_pos*/ 10'd377),
+    .pos_of_player_2(input_pos),
     .screen_idle(screen_idle),
     .screen_multi(screen_multi),
     .points_player_1(points_player_1),

@@ -38,6 +38,10 @@
  localparam y_size_of_racket = 80;
 
  localparam speed_of_ball    = 10;
+ localparam points_to_win    = 10;
+
+ localparam upper_limit      = 717;
+ localparam lower_limit      = 51;
 
  //localparam probability_dividend = 127;
 
@@ -96,15 +100,15 @@
                 state_out = P_SCOR;
 
             end
-            // else if(pos_player_1 >= 717) begin
-            //     if(y_pos_of_ball > y_size_of_racket + 51) begin
+            // else if(pos_player_1 >= upper_limit) begin
+            //     if(y_pos_of_ball > y_size_of_racket + lower_limit) begin
             //         state_out = P_SCOR;
             //     end else begin
             //         state_out = FLY;
             //     end
             // end
-            // else if(pos_player_1 <= 51) begin
-            //     if(y_pos_of_ball < 717) begin
+            // else if(pos_player_1 <= lower_limit) begin
+            //     if(y_pos_of_ball < upper_limit) begin
             //         state_out = P_SCOR;
             //     end else begin
             //         state_out = FLY;
@@ -242,7 +246,7 @@ end
                         if(!screen_multi && reached_max) begin
                             state_nxt = WIN;
                         end
-                        else if(points_player_1 >= 10 || points_player_2 >= 10) begin // in order to uses the same screen for points make flag here
+                        else if(points_player_1 >= points_to_win || points_player_2 >= points_to_win) begin // in order to uses the same screen for points make flag here
                             state_nxt = WIN;
                         end
                         else if(reached_max && screen_multi) begin
@@ -310,20 +314,20 @@ end
 
  always_comb begin  : set_direction_of_the_flight
     //hit upper bar
-     if(y_pos_of_ball <= 51 && fly_NE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
+     if(y_pos_of_ball <= lower_limit && fly_NE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_SE_nxt = 1;
      end
-     else if(y_pos_of_ball <= 51 && fly_NW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
+     else if(y_pos_of_ball <= lower_limit && fly_NW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_SW_nxt = 1;
      end
     // hit lower bar
-     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
+     else if(y_pos_of_ball >= upper_limit - size_of_ball && fly_SE && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_NE_nxt = 1;
      end
-     else if(y_pos_of_ball >= 717 - size_of_ball && fly_SW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
+     else if(y_pos_of_ball >= upper_limit - size_of_ball && fly_SW && x_pos_of_ball > x_player2_bounce && x_pos_of_ball < x_player1_bounce) begin
         {fly_SW_nxt, fly_W_nxt, fly_NW_nxt, fly_NE_nxt, fly_E_nxt, fly_SE_nxt} = '0;
         fly_NW_nxt = 1;
      end
@@ -346,7 +350,7 @@ end
         // 15% probability for each of going sw nw ne se and 20% each of e and w
 
         //go somwhere west
-        if(random_counter <= 19) begin //doesn't like multiplying by fraction
+        if(random_counter <= 19) begin //doesn't like multiplying by fraction so i just used ordinary numbers
             fly_SW_nxt = 1;
         end
         else if(random_counter > 19 && random_counter <= 38) begin

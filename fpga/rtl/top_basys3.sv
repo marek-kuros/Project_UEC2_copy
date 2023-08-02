@@ -29,6 +29,7 @@
      inout  wire PS2Data,
      
      input  wire [1:0] sw,
+     
      input  wire [7:1]  JA,
      input  wire [2:0]  JB,
 
@@ -63,7 +64,7 @@
  
  clk_wiz_0 u_clk_wiz_0(
     .clk(clk),
-    .clk_100MHz(pclk100MHz),
+    //.clk_100MHz(pclk100MHz),
     .clk_65MHz(pclk),
     .locked(locked)
  );
@@ -85,7 +86,7 @@
  
  top u_top (
      .clk65MHz(pclk),
-     .clk100MHz(pclk100MHz),
+     //.clk100MHz(pclk100MHz),
 
      .ps2_clk(PS2Clk),
      .ps2_data(PS2Data),
