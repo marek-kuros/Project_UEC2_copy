@@ -1,5 +1,6 @@
 from machine import Pin, I2C
 from ustruct import unpack
+import time
 
 i2c = I2C(sda=Pin(15), scl=Pin(13), freq=400000)
 i2c.writeto_mem(0x53, 0x2D, bytearray([0x08]))
@@ -12,6 +13,7 @@ def read_adxl345_value():
 
 while(True):
     adxl_value = read_adxl345_value()
+    time.sleep(0.07)
     for i in range(6):
             pin_array[i].off()
     if(adxl_value < (-240,)):
