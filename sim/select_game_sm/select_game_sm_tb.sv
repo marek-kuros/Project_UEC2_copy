@@ -3,7 +3,7 @@
  * MTM UEC2
  *
  * Description:
- * Testbench for vga_timing module.
+ * Testbench for select_game_sm
  * Author: Sabina
  */
 

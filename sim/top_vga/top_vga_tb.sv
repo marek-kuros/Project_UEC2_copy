@@ -7,6 +7,8 @@
  * 2023  AGH University of Science and Technology
  * MTM UEC2
  * Piotr Kaczmarczyk
+ * 
+ * Modified by: Marek Kuros
  *
  * Description:
  * Testbench for top_vga.
@@ -29,7 +31,7 @@ module top_vga_tb;
  *  Local parameters
  */
 
-localparam CLK_PERIOD = 15;     // 40 MHz
+localparam CLK_PERIOD = 15;     // 65 MHz
 
 
 /**
@@ -48,12 +50,7 @@ wire [3:0] r, g, b;
 
 initial begin
     clk = 1'b0;
-    forever #(CLK_PERIOD/2) clk = ~clk;
-end
-
-initial begin
-    clk100 = 1'b0;
-    forever #(CLK_PERIOD/5) clk100 = ~clk100;
+    forever #(CLK_PERIOD) clk = ~clk;
 end
 
 
@@ -63,7 +60,6 @@ end
 
 top dut (
     .clk65MHz(clk),
-    .clk100MHz(clk100),
 
     .ps2_clk(),
     .ps2_data(),

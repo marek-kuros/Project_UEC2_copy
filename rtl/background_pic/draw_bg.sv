@@ -49,7 +49,7 @@ task IdleScreen(input logic [10:0] vcount, hcount);
     else if (hcount == 0)                // - left edge:
         rgb_nxt = 12'h0_f_0;                // - - make a green line.
     else if (hcount == HOR_PIXELS - 1)   // - right edge:
-        rgb_nxt = 12'h0_0_f;                // - - make a blue line.
+        rgb_nxt = 12'h0_f_0;                // - - make a green line.
     else if (vcount < V_start + V_pixel_no &&  hcount < H_start + H_pixel_no &&
             vcount >= V_start &&  hcount >= H_start)                                   // The rest of active display pixels:
         rgb_nxt = 12'h5_5_5;                // - fill with gray.
@@ -95,13 +95,13 @@ always_ff @(posedge clk65MHz) begin : bg_ff_blk
 end
 
 always_comb begin : bg_comb_blk
-    if (timing_if.vblnk || timing_if.hblnk) begin             // Blanking region:
+    if (draw_bg_if.vblnk || draw_bg_if.hblnk) begin             // Blanking region:
         rgb_nxt = 12'h0_0_0;                    // - make it it black.
     end else begin                          // Active region:
         if(screen_single || screen_multi) begin
-            GameScreen(timing_if.vcount, timing_if.hcount);
+            GameScreen(draw_bg_if.vcount, draw_bg_if.hcount);
         end else begin
-            IdleScreen(timing_if.vcount, timing_if.hcount);
+            IdleScreen(draw_bg_if.vcount, draw_bg_if.hcount);
         end
     end
 end

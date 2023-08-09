@@ -32,7 +32,7 @@
  );
 
  //localparams
- localparam x_player2_bounce = 100; //100
+ localparam x_player2_bounce = 104; //100
  localparam x_player1_bounce = 913; //923 size_of_ball
  localparam size_of_ball     = 15;
  localparam y_size_of_racket = 80;

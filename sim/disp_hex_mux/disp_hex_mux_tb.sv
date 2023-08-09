@@ -1,111 +1,121 @@
-`timescale 1ns / 1ns
+/**
+ *  Copyright (C) 2023  AGH University of Science and Technology
+ * MTM UEC2
+ *
+ * Description:
+ * Testbench ror disp_hex_mux
+ * Author: Sabina
+ */
 
+`timescale 1ns / 1ps 
 module disp_hex_mux_tb;
 
-  // Testbench parameters and signals
-  parameter N = 18;
-  logic clk, reset;
-  logic [3:0] hex0, hex1, hex2, hex3, dp_in;
-  logic [3:0] an;
-  logic [7:0] sseg;
-  int pass_cnt = 0; // Updated the counter variable name to pass_cnt
+   // Input signals
+   logic clk;
+   logic reset;
+   logic [3:0] hex3, hex2, hex1, hex0; // Hex digits
+   logic [3:0] dp_in; // 4 decimal points
 
-  // Instantiate the DUT (Design Under Test)
-  disp_hex_mux dut (
-    .clk(clk),
-    .reset(reset),
-    .hex3(hex3),
-    .hex2(hex2),
-    .hex1(hex1),
-    .hex0(hex0),
-    .dp_in(dp_in),
-    .an(an),
-    .sseg(sseg)
-  );
+   // Output signals
+   logic [3:0] an; // Enable 1-out-of-4 activated low
+   logic [7:0] sseg; // LED segments
 
-  // Generate clock (default frequency 50 MHz)
-  always #5 clk = ~clk;
+   // Instance of the tested module (DUT - Design Under Test)
+   disp_hex_mux dut (
+      .clk(clk),
+      .reset(reset),
+      .hex3(hex3),
+      .hex2(hex2),
+      .hex1(hex1),
+      .hex0(hex0),
+      .dp_in(dp_in),
+      .an(an),
+      .sseg(sseg)
+   );
 
-  // Initialize testbench
-  initial begin
-    clk = 0;
-    reset = 1;
-    hex0 = 0; hex1 = 0; hex2 = 0; hex3 = 0;
-    dp_in = 0;
-    #10 reset = 0; // Deactivate reset
+   // Clock generator
+   always #(10) clk = ~clk; // Assuming 100 MHz clock
 
-    $display("-----------------------------");
-    $display("        TEST SUMMARY         ");
+   // Reset generator
+   initial begin
+      reset = 1;
+      #100; // Wait a few clock cycles
+      reset = 0;
+   end
 
-    // Test 1 - Display number 0x0 (decimal 0)
-      hex0 = 0; hex1 = 0; hex2 = 0; hex3 = 0;
-      dp_in = 0;
-      #100;
-      if (sseg === 7'b1000000)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Test 1 failed. Expected: 7'b1000000, Received: %b", sseg);
+   // Test logic
+   initial begin
+      logic [6:0] expected_sseg;
+      logic [3:0] hex_in;
+      int pass_cnt;
+      int fail_cnt;
+      int total_cnt;
+      $display("--------Start of the test---------");
 
-    // Test 2 - Display number 0x7 (decimal 7)
-      hex0 = 7; hex1 = 0; hex2 = 0; hex3 = 0;
-      dp_in = 0;
-      #100;
-      if (sseg === 7'b1111000)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Test 2 failed. Expected: 7'b1111000, Received: %b", sseg);
-
-    // Test 3 - Display number 4'hf (decimal 15)
-      hex0 = 0; hex1 = 0; hex2 = 0; hex3 = 4'hf;
-      dp_in = 0;
-      #100;
-      if (sseg === 7'b0001110)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Test 3 failed. Expected: 7'b0001110, Received: %b", sseg);
-
-    // Additional test: Display number 4'h5 with decimal point
-      hex0 = 4'h5; hex1 = 0; hex2 = 0; hex3 = 0;
-      dp_in = 4'b0001;
-      #100;
-      if (sseg === 7'b0010010)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("5 with decimal point Test failed. Expected: 7'b0010010, Received: %b", sseg);
-
-    // Boundary Tests
-    // Maximum values for each hexadecimal digit (4'hf)
-      hex0 = 4'hf; hex1 = 4'hf; hex2 = 4'hf; hex3 = 4'hf;
-      dp_in = 0;
-      #100;
-      if (sseg === 7'b1111110)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Maximum values for each hex dig failed. Expected: 7'b1111110, Received: %b", sseg);
+      // Test case
+      for (int h3 = 0; h3 <= 1; h3++) begin 
+         for (int h2 = 0; h2 <= 9; h2++) begin 
+            for (int h1 = 0; h1 <= 1; h1++) begin
+               for (int h0 = 0; h0 <= 9; h0++) begin
+                  for (int dp = 0; dp <= 0; dp++) begin
+                     hex3 = h3;
+                     hex2 = h2;
+                     hex1 = h1;
+                     hex0 = h0;
+                     dp_in = dp;
+                     #1000; // Wait for a while
 
 
-    // Maximum values for decimal points (activation)
-      hex0 = 4'ha; hex1 = 4'hb; hex2 = 4'hc; hex3 = 4'hd;
-      dp_in = 4'b1111;
-      #100;
-      if (sseg === 7'b0001111)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Maximum decimal points failed. Expected: 7'b0001111, Received: %b", sseg);
+                     // Derive 'hex_in' from hex digit signals
+                     
+                     assign hex_in = {hex3, hex2, hex1, hex0};
 
-    // Minimum values for decimal points (deactivation)
-      hex0 = 4'ha; hex1 = 4'hb; hex2 = 4'hc; hex3 = 4'hd;
-      dp_in = 4'b0000;
-      #100;
-      if (sseg === 7'b0000110)
-        pass_cnt++; // Increment the pass_cnt variable
-      else
-        $display("Minimum decimal points failed. Expected: 7'b0000110, Received: %b", sseg);
+                     // Expected output
+                     case(hex_in)
+                        4'h0: expected_sseg = 7'b1000000;
+                        4'h1: expected_sseg = 7'b1111001;
+                        4'h2: expected_sseg = 7'b0100100;
+                        4'h3: expected_sseg = 7'b0110000;
+                        4'h4: expected_sseg = 7'b0011001;
+                        4'h5: expected_sseg = 7'b0010010;
+                        4'h6: expected_sseg = 7'b0000010;
+                        4'h7: expected_sseg = 7'b1111000;
+                        4'h8: expected_sseg = 7'b0000000;
+                        4'h9: expected_sseg = 7'b0010000;
+                        4'ha: expected_sseg = 7'b0001000;
+                        4'hb: expected_sseg = 7'b0000011;
+                        4'hc: expected_sseg = 7'b1000110;
+                        4'hd: expected_sseg = 7'b0100001;
+                        4'he: expected_sseg = 7'b0000110;
+                        default: expected_sseg = 7'b0001110; //4'hf
+                     endcase
 
-    // Summary of test results
-      $display("Number of test cases passed: %d", pass_cnt);
-      $display("-----------------------------");
+                     // Compare sseg output values
+                     if (sseg === expected_sseg) begin
+                         $display("Combination %02d:%02d - Test Result: PASSED", (h3 * 10 + h2), (h1 * 10 + h0));
+                         pass_cnt = pass_cnt + 1;
+                     end else begin
+                         $display("Combination %02d:%02d - Test Result: FAILED, Expected: %b, Received: %b", (h3 * 10 + h2), (h1 * 10 + h0), expected_sseg, sseg);
+                         fail_cnt = fail_cnt + 1;
+                     end
+                     total_cnt = total_cnt + 1;
+
+                  end
+               end 
+            end
+         end
+      end
+
+      // Test finished
+      $display("___________________________");
+      $display("End of the test.");
+      $display("Total tests: %d", total_cnt);
+      $display("Pass tests: %d", pass_cnt);
+      $display("Fail tests: %d", fail_cnt);
+      
       $finish;
-  end
+   end
 
 endmodule
+
+

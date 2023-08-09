@@ -8,7 +8,7 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  * 
- * Modified even more by:
+ * Modified by:
  * Marek Kuros
  *
  * Description:

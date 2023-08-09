@@ -3,7 +3,7 @@
  * MTM UEC2
  *
  * Description:
- * Testbench
+ * Testbench for draw_rect_ctl 
  * Author: Sabina
  */
 `timescale 1ns/1ps
@@ -11,12 +11,12 @@
 module draw_rect_ctl_tb;
 
     // Inputs
-    reg clk65MHz;
-    reg rst;
-    reg [11:0] mouse_ypos;
-    reg screen_idle;
-    reg screen_single;
-    reg [9:0] input_pos;
+    logic clk65MHz;
+    logic rst;
+    logic [11:0] mouse_ypos;
+    logic screen_idle;
+    logic screen_single;
+    logic [9:0] input_pos;
     
 
 
@@ -56,32 +56,43 @@ module draw_rect_ctl_tb;
         
         #10 rst = 0;  // Deassert reset
         
+        $display("-----------------------------");
+
         // Test scenario
         #20 screen_idle = 1;
         assert(screen_idle);
-        $display("Zmieniono na tryb screen_idle");
-        #30 screen_idle = 0;  // Transition to screen_single
+        $display("Chenge mode  on screen_idle");
+        
+        #30 screen_idle = 0; 
+        #30 screen_single = 1; 
         assert(!screen_idle && screen_single);
-        $display("Zmieniono na tryb screen_single");
+        $display("Chenge mode on screen_single");
+
         #40 mouse_ypos = 100;
         assert(mouse_ypos == 100);
-        $display("Ustawiono mouse_ypos na 100");
+        $display("Set up mouse_ypos on 100");
+
         #50 mouse_ypos = 200;
         assert(mouse_ypos == 200);
-        $display("Ustawiono mouse_ypos na 200");
+        $display("Set up mouse_ypos on 200");
+
         #60 screen_single = 1;
         assert(!screen_idle && screen_single);
-        $display("Zmieniono na tryb screen_single");
+        $display("Change on mode screen_single");
+
         #70 mouse_ypos = 300;
         assert(mouse_ypos == 300);
-        $display("Ustawiono mouse_ypos na 300");
+        $display("Set up mouse_ypos on 300");
+
         #80 mouse_ypos = 400;
         assert(mouse_ypos == 400);
-        $display("Ustawiono mouse_ypos na 400");
-        #90 screen_idle = 1;  // Transition back to screen_idle
+        $display("Set up mouse_ypos on 400");
+
+        #90 screen_idle = 1;  
         assert(screen_idle);
-        $display("Zmieniono na tryb screen_idle");
+        $display("Change na mode screen_idle");
         
+        $display("-----------------------------");
    
         
         #100 $finish;

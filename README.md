@@ -2,7 +2,7 @@
 Gra została stworzona wykorzystując **płytkę deweloperską z FPGA Xilinx Artix 7-FPGA _Basys3_ :mechanical_arm:** <br/>
 <sub>przykład na zdjęciu poniżej :point_down:</sub><br/>
 <!--<sup>jej, pisząc to czuję się jakbym wrócił do html+css</sup>-->
-![basys3 - przykładowa płytka](/doc/basys3_picture.jpg)
+![basys3 - przykładowa płytka](../main/doc/basys3_picture.jpg)
 
 Do rozpoczęcia rozgrywki należy podpiąć ekran o rozdzielczości oraz odświeżaniu conajmniej 1024x768@60Hz <br/>
 wraz z myszką. <br/>
@@ -11,8 +11,8 @@ Po włączeniu, gra wita nas ekranem głównym gdzie wyświetlone są opcje rozg
 * `Tryb singleplayer` :technologist:
 * `Tryb Multiplayer`  :technologist::technologist: <br/>
 
-W celu wybrania trybu gry należy odpowiednio przesunąć przełącznik "sw[0] lub sw[1]" w stan **HIGH**. 
-Jeżeli ustwaimy "sw[0]" jako **HIGH**, to przejdziemy do trybu singleplayer natomiast w przypadku "sw[1]" jako **HIGH**, załączymy tryb multiplayer. Jeżeli niechcący przełączymy obydwa przełączniki to gra zostanie w ekranie startowym. Warto nadmienić, iż w każdy momencie możemy wyjść z danego trybu gry przełączając przełącznik w stan **LOW**. <br/>
+W celu wybrania trybu gry należy odpowiednio przesunąć przełącznik "`sw[0]` lub `sw[1]`" w stan **HIGH**. 
+Jeżeli ustwaimy "`sw[0]`" jako **HIGH**, to przejdziemy do trybu singleplayer natomiast w przypadku "`sw[1]`" jako **HIGH**, załączymy tryb multiplayer. Jeżeli niechcący przełączymy obydwa przełączniki to gra zostanie w ekranie startowym. Warto nadmienić, iż w każdy momencie możemy wyjść z danego trybu gry przełączając przełącznik w stan **LOW**. <br/>
 Celem rozpoczęcia gry w którymkolwiek trybie należy najpierw zaserwować piłeczkę, wykonujemy to guzikiem btnR (piłeczka zaczyna lecieć w randomową stronę - 20% prawdopodobieństaw, że poleci prostopadle do lini paletek oraz po 15%, żę poleci pod skosem). <br/>
 
 ! Przycisk btnC jest wykorzystywany jako reset.
@@ -26,7 +26,7 @@ Tryb multiplayer to klasyczny przykład gry w ping-ponga :ping_pong:. Wygrywa os
 ### _Po zakończonej grze można ją zresetować ponownie serwując piłeczkę._
 
 <sub>Elementy na płytce, z których korzysta gra :point_down:</sub>
-![basys3 - ważniejsze elementy wykorzystane do gry](/doc/basys3_picture_howtoplay.png)
+![basys3 - ważniejsze elementy wykorzystane do gry](../main/doc/basys3_picture_howtoplay.png)
 
 ## Dodatkowe opcje rozgrywki
 ### Gamepad niczym prawdziwa paletka :scream_cat:!
@@ -40,7 +40,7 @@ Do wykonania paletki potrzeba:
 ![kable goldpin](https://cdn1.botland.com.pl/104345/przewody-polaczeniowe-mesko-meskie-justpi-10cm-40szt.jpg)
 
 ### Przykładowe połączenie gotowej "paletki"
-![ready racket](/doc/IMG_20230802_151337.jpg)
+![ready racket](../main/doc/IMG_20230802_151337.jpg)
 
 ### Opis działania
 Akcelerometr komunikuje się z mikrokontrolerem za pomocą protokołu I2C, natomiast płytka odpowiada za zamianę wartości przechylenia paletki na pozycję gracza, która to jest odczytywana przez układ fpga
@@ -214,6 +214,7 @@ Poniżej przedstawiono hierarchię plików w projekcie. Aby wszystkie narzędzia
 
 ```text
 .
+├── doc                            - folder wraz z dokumentacją
 ├── env.sh                         - konfiguracja środowiska
 ├── fpga                           - pliki związane z FPGA
 │   ├── constraints                - * pliki xdc

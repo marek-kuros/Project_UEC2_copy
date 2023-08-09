@@ -2,6 +2,7 @@
  *  Copyright (C) 2023  AGH University of Science and Technology
  * MTM UEC2
  * Author: Piotr Kaczmarczyk
+ * Modified by: Marek Kuros
  *
  * Description:
  * Testbench for vga_timing module.
@@ -19,7 +20,7 @@ vga_if_no_rgb timing_if();
  *  Local parameters
  */
 
-localparam CLK_PERIOD = 25;     // 40 MHz
+localparam CLK_PERIOD = 15;     // 65 MHz
 
 
 /**
